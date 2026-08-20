@@ -16,7 +16,7 @@
 
 <style>
 /* ============================================================
-   ՎԱՐՈՒԺԱՆ & ԱՆԱՀԻՏ — 25.08.2026  (ֆոնը՝ #efefef)
+   ՎԱՐՈՒԺԱՆ & ԱԱՀԻ — 25.08.2026 | HY / EN / RU
 ============================================================ */
 :root{
   --ivory:#efefef;
@@ -27,7 +27,7 @@
   --shadow:0 20px 60px rgba(74,63,58,.15);
   --serif:'Noto Serif Armenian',serif;
   --sans:'Noto Sans Armenian',sans-serif;
-  --script:'Great Vibes',cursive;
+  --script:'Great Vibes','Noto Serif Armenian',cursive;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -36,8 +36,6 @@ img{max-width:100%;display:block}
 h1,h2,h3{font-family:var(--serif);line-height:1.25}
 ::selection{background:var(--rose-soft);color:#fff}
 section{scroll-margin-top:70px}
-
-/* ---------- Սպիտակ փետուրներ ---------- */
 #petals{position:fixed;inset:0;z-index:6;pointer-events:none}
 
 /* ================= ԾՐԱՐ ================= */
@@ -46,10 +44,9 @@ section{scroll-margin-top:70px}
   transition:opacity .9s ease, visibility .9s}
 #intro.fade{opacity:0;visibility:hidden;pointer-events:none}
 .intro-hint{font-family:var(--serif);color:var(--ink-soft);letter-spacing:.06em;margin-bottom:26px;
-  font-size:clamp(.95rem,2.5vw,1.15rem);animation:hintPulse 2s ease-in-out infinite}
+  font-size:clamp(.95rem,2.5vw,1.15rem);animation:hintPulse 2s ease-in-out infinite;text-align:center;padding:0 16px}
 #intro.opened .intro-hint{opacity:0;transition:opacity .4s}
 @keyframes hintPulse{0%,100%{opacity:.55;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
-
 .envelope{position:relative;width:min(88vw,430px);aspect-ratio:8/5.4;cursor:pointer;perspective:1400px;outline:none;
   filter:drop-shadow(0 30px 45px rgba(74,63,58,.28));transition:transform .5s ease}
 .envelope:hover,.envelope:focus-visible{transform:translateY(-6px) scale(1.01)}
@@ -79,19 +76,26 @@ section{scroll-margin-top:70px}
   color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 10px rgba(0,0,0,.2)}
 .envelope.open .env-flap{transform:rotateX(180deg);z-index:1}
 
-/* ================= TOP BAR ================= */
+/* ================= TOP BAR + LANGS ================= */
 .topbar{position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;justify-content:space-between;
   padding:12px clamp(16px,4vw,48px);background:rgba(239,239,239,.88);backdrop-filter:blur(10px);
   border-bottom:1px solid rgba(198,161,91,.25);transform:translateY(-110%);transition:transform .9s ease .2s}
 body.ready .topbar{transform:translateY(0)}
 .mono{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1.05rem;display:flex;align-items:center;gap:.45em}
 .mono .h{color:var(--rose);animation:heartbeat 1.8s ease-in-out infinite;display:inline-block}
+.tb-right{display:flex;align-items:center;gap:clamp(10px,2vw,22px)}
 .topbar nav{display:flex;gap:clamp(10px,2.5vw,24px)}
 .topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:.86rem;letter-spacing:.05em;padding:6px 2px;position:relative;transition:color .3s}
 .topbar nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--gold);transition:width .3s}
 .topbar nav a:hover{color:var(--gold-dark)}
 .topbar nav a:hover::after{width:100%}
-@media(max-width:640px){.topbar nav a:first-child{display:none}}
+.langs{display:flex;gap:6px}
+.langs button{border:1.5px solid rgba(198,161,91,.5);background:#fff;color:var(--ink-soft);border-radius:999px;
+  padding:4px 11px;font-size:.72rem;font-weight:700;cursor:pointer;letter-spacing:.05em;transition:all .3s;font-family:var(--sans)}
+.langs button:hover{color:var(--gold-dark)}
+.langs button.on{background:linear-gradient(90deg,var(--gold),var(--gold-dark));color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(169,133,63,.35)}
+@media(max-width:700px){.topbar nav a:first-child{display:none}}
+@media(max-width:480px){.topbar nav{display:none}}
 
 /* ================= HERO ================= */
 main{position:relative;z-index:1}
@@ -137,7 +141,7 @@ section{padding:clamp(70px,10vw,110px) 20px;position:relative}
 .reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
 .reveal.in{opacity:1;transform:translateY(0)}
 
-/* ================= COUNTDOWN ================= */
+/* ================= COUNTDOWN + CALENDAR ================= */
 #countdown{background:radial-gradient(circle at 50% 0%, rgba(246,231,228,.7), transparent 60%), var(--ivory)}
 .cd-sub{text-align:center;color:var(--ink-soft);margin-bottom:34px;font-size:clamp(.95rem,2.5vw,1.1rem)}
 .cd-grid{display:flex;justify-content:center;gap:clamp(10px,2.5vw,26px);flex-wrap:wrap}
@@ -148,11 +152,27 @@ section{padding:clamp(70px,10vw,110px) 20px;position:relative}
 .cd-num.tick{animation:tick .5s ease}
 @keyframes tick{0%{transform:translateY(-8px);opacity:.2}100%{transform:translateY(0);opacity:1}}
 .cd-lbl{margin-top:8px;color:var(--gold-dark);font-size:clamp(.7rem,2vw,.85rem);letter-spacing:.18em;text-transform:uppercase}
+
+/* Calendar */
+.cal-card{max-width:400px;margin:46px auto 0;background:#fff;border:1px solid rgba(198,161,91,.35);border-radius:18px;
+  box-shadow:0 14px 34px rgba(74,63,58,.12);padding:22px 18px 18px;position:relative}
+.cal-card::before{content:"♥";position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--rose-soft),var(--rose));color:#fff;width:30px;height:30px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;box-shadow:0 6px 14px rgba(201,111,111,.4)}
+.cal-title{font-family:var(--serif);text-align:center;color:var(--ink);font-weight:600;margin-bottom:12px;letter-spacing:.1em}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-wd{color:var(--gold-dark);font-size:.7rem;font-weight:700;letter-spacing:.03em;padding:4px 0}
+.cal-day{padding:7px 0;border-radius:8px;font-size:.88rem;color:var(--ink-soft)}
+.cal-day.empty{visibility:hidden}
+.cal-day.sel{background:linear-gradient(135deg,var(--rose-soft),var(--rose));color:#fff;font-weight:700;position:relative;
+  animation:heartbeat 1.8s infinite;box-shadow:0 6px 16px rgba(201,111,111,.45)}
+.cal-day.sel::after{content:"♥";position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--rose)}
+
 .cd-date{margin-top:38px;text-align:center;font-family:var(--serif);font-size:clamp(1.05rem,3.4vw,1.5rem);color:var(--ink);
   font-weight:600;display:flex;align-items:center;justify-content:center;gap:.5em;flex-wrap:wrap}
 .cd-date .heart{width:1em;height:1em;fill:var(--rose);animation:heartbeat 1.6s infinite}
 
-/* ================= ԺԱՄԱՆԱԿԱՑՈՒՅՑ — դինամիկ սրտիկների գիծ ================= */
+/* ================= TIMELINE (սրտիկների դինամիկ գիծ) ================= */
 .timeline{list-style:none;max-width:980px;margin:0 auto;position:relative;padding:10px 0}
 .timeline::before{content:"";position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);width:16px;
   background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='26'%20viewBox='0%200%2016%2026'%3E%3Cpath%20d='M8%2010.2C6.9%208.6%205.5%208%204.4%208%202.6%208%201.5%209.4%201.5%2011c0%202.6%204%205.6%206.5%207.4%202.5-1.8%206.5-4.8%206.5-7.4%200-1.6-1.1-3-2.9-3-1.1%200-2.5.6-3.6%202.2z'%20fill='%23c96f6f'/%3E%3C/svg%3E");
@@ -189,7 +209,7 @@ section{padding:clamp(70px,10vw,110px) 20px;position:relative}
   .t-item:nth-child(odd) .t-card,.t-item:nth-child(even) .t-card{grid-column:2;text-align:left}
 }
 
-/* ================= ՊԱՀԵՐ (3 լուսանկար) ================= */
+/* ================= ՊԱՀԵՐ ================= */
 #gallery{background:radial-gradient(circle at 50% 100%, rgba(246,231,228,.6), transparent 60%), var(--ivory)}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,4vw,44px);max-width:1020px;margin:0 auto;align-items:center}
 .pol{background:#fff;padding:14px 14px 16px;box-shadow:0 16px 40px rgba(74,63,58,.18);position:relative;
@@ -238,12 +258,14 @@ section{padding:clamp(70px,10vw,110px) 20px;position:relative}
 #toast.show{transform:translate(-50%,0)}
 
 /* ================= FOOTER + MUSIC ================= */
-footer{text-align:center;padding:44px 20px 90px;background:#e7e7e7;border-top:1px solid rgba(198,161,91,.3);position:relative;z-index:1}
+footer{text-align:center;padding:44px 20px 60px;background:#e7e7e7;border-top:1px solid rgba(198,161,91,.3);position:relative;z-index:1}
 footer .f-names{font-family:var(--serif);font-weight:700;font-size:1.3rem;color:var(--ink)}
 footer .f-names .amp{font-family:var(--script);color:var(--rose);padding:0 .15em}
 footer .f-date{color:var(--gold-dark);letter-spacing:.3em;margin-top:6px;font-size:.85rem;font-weight:600}
 footer .f-love{margin-top:14px;color:var(--ink-soft);font-size:.85rem}
 footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:inline-block}
+footer .f-sign{margin-top:22px;font-family:var(--serif);font-style:italic;color:var(--rose);
+  font-size:clamp(1.25rem,3.6vw,1.7rem);font-weight:600}
 
 #musicBtn{position:fixed;right:22px;bottom:22px;z-index:150;width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;
   background:linear-gradient(135deg,var(--rose-soft),var(--rose));box-shadow:0 12px 28px rgba(201,111,111,.45);
@@ -276,21 +298,18 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
 
 <!-- ================= ԾՐԱՐ ================= -->
 <div id="intro">
-  <p class="intro-hint">✉ Հպվեք ծրարին՝ հրավերը բացելու համար</p>
+  <p class="intro-hint" data-i18n="hint">✉ Հպվեք ծրարին՝ հրավերը բացելու համար</p>
   <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Բացել հարսանյաց հրավերի ծրարը">
     <div class="env-back"></div>
-
     <!-- IMG-01․ փոխարինեք src-ը ձեր img-01.jpg նկարով -->
     <div class="env-card">
-      <img src="img-01.jpg" alt="Վարուժան և Անահիտ">
+      <img src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/5C97E4E09-B4A7-4088-BAB4-D5FCDC5943B46264.png" alt="Վարուժան և Անահիտ">
       <div class="env-card-txt">
-        <span class="env-card-names">Վարուժան <span class="amp">&amp;</span> Անահիտ</span>
+        <span class="env-card-names"><span data-i18n="nameV">Վարուժան</span> <span class="amp">&amp;</span> <span data-i18n="nameA">Անահիտ</span></span>
         <span class="env-card-date">25 . 08 . 2026</span>
       </div>
     </div>
-
     <div class="env-pocket"></div>
-
     <div class="env-rings" aria-hidden="true">
       <svg viewBox="0 0 120 78">
         <defs>
@@ -303,7 +322,6 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
         <path d="M60 2c-4-7-14-5-14 3 0 7 14 14 14 14s14-7 14-14c0-8-10-10-14-3z" fill="#d98b8b"/>
       </svg>
     </div>
-
     <div class="env-flap"></div>
   </div>
 </div>
@@ -311,20 +329,27 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
 <!-- ================= TOP BAR ================= -->
 <header class="topbar">
   <span class="mono">Վ <span class="h">♥</span> Ա</span>
-  <nav aria-label="Նավիգացիա">
-    <a href="#countdown">Հետհաշվարկ</a>
-    <a href="#timeline">Ժամանակացույց</a>
-    <a href="#gallery">Մեր պահերը</a>
-    <a href="#rsvp">RSVP</a>
-  </nav>
+  <div class="tb-right">
+    <nav aria-label="Նավիգացիա">
+      <a href="#countdown" data-i18n="navCd">Հետհաշվարկ</a>
+      <a href="#timeline" data-i18n="navTl">Ժամանակացույց</a>
+      <a href="#gallery" data-i18n="navGal">Մեր պահերը</a>
+      <a href="#rsvp">RSVP</a>
+    </nav>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="hy" class="on">ՀԱՅ</button>
+      <button type="button" data-lang="en">ENG</button>
+      <button type="button" data-lang="ru">РУС</button>
+    </div>
+  </div>
 </header>
 
 <main>
   <!-- ================= HERO ================= -->
   <section class="hero" id="home">
-    <p class="overline anim d1">Մենք ամուսնանում ենք</p>
-    <img class="hero-photo anim d2" src="img-01.jpg" alt="Վարուժան և Անահիտ">
-    <h1 class="anim d3">Վարուժան <span class="amp">&amp;</span> Անահիտ</h1>
+    <p class="overline anim d1" data-i18n="overline">Մենք ամուսնանում ենք</p>
+    <img class="hero-photo anim d2" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/5C97E4E09-B4A7-4088-BAB4-D5FCDC5943B46264.png" alt="Վարուժան և Անահիտ">
+    <h1 class="anim d3"><span data-i18n="nameV">Վարուժան</span> <span class="amp">&amp;</span> <span data-i18n="nameA">Անահիտ</span></h1>
 
     <div class="date-line anim d4" aria-label="25 օգոստոսի 2026">
       <span>25</span>
@@ -335,29 +360,36 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
     </div>
 
     <p class="invite-text anim d5">
-      <span class="dear">Սիրելի բարեկամներ և ընկերներ,</span>
-      Մեծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։<br>
-      Ձեր ներկայությունը կդարձնի մեր երջանկությունը լիարեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։
-
+      <span class="dear" data-i18n="dear">Սիրելի բարեկամներ և ընկերներ,</span>
+      <span data-i18n="inv1">Մեծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։</span><br>
+      <span data-i18n="inv2">Ձեր ներկայությունը կդարձնի մեր երջանկությունը լիարժեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։</span>
+    </p>
     <div class="scroll-cue anim d5" aria-hidden="true"></div>
   </section>
 
-  <!-- ================= COUNTDOWN ================= -->
+  <!-- ================= COUNTDOWN + CALENDAR ================= -->
   <section id="countdown">
     <div class="sec-head reveal">
-      <span class="script">Save the date</span>
-      <h2>Կիսիր այս գեղեցիկ օրը մեզ հետ</h2>
+      <span class="script" data-i18n="scriptCd">Save the date</span>
+      <h2 data-i18n="h2Cd">Կիսիր այս գեղեցիկ օրը մեզ հետ</h2>
       <div class="line"></div>
     </div>
-    <p class="cd-sub reveal">Մինչ մեր հարսանիքը մնաց՝</p>
+    <p class="cd-sub reveal" data-i18n="cdSub">Մինչ մեր հարսանիքը մնաց՝</p>
     <div class="cd-grid reveal" role="timer" aria-live="polite">
-      <div class="cd-box"><div class="cd-num" id="cdD">0</div><div class="cd-lbl">Օր</div></div>
-      <div class="cd-box"><div class="cd-num" id="cdH">00</div><div class="cd-lbl">Ժամ</div></div>
-      <div class="cd-box"><div class="cd-num" id="cdM">00</div><div class="cd-lbl">Րոպե</div></div>
-      <div class="cd-box"><div class="cd-num" id="cdS">00</div><div class="cd-lbl">Վայրկյան</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdD">0</div><div class="cd-lbl" data-i18n="lblD">Օր</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdH">00</div><div class="cd-lbl" data-i18n="lblH">Ժամ</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdM">00</div><div class="cd-lbl" data-i18n="lblM">Րոպե</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdS">00</div><div class="cd-lbl" data-i18n="lblS">Վայրկյան</div></div>
     </div>
+
+    <!-- Օրացույց -->
+    <div class="cal-card reveal" aria-label="25.08.2026">
+      <div class="cal-title" id="calTitle">Օգոստոս 2026</div>
+      <div class="cal-grid" id="calGrid"></div>
+    </div>
+
     <p class="cd-date reveal">
-      Հարսանիքի օրը՝
+      <span data-i18n="cdDate">Հարսանիքի օրը՝</span>
       <span>25</span>
       <svg class="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-10-10C.6 7 3 3.5 6.5 3.5c2.2 0 4 1.3 5.5 3.4 1.5-2.1 3.3-3.4 5.5-3.4C21 3.5 23.4 7 22 11c-2 4.7-10 10-10 10z"/></svg>
       <span>08</span>
@@ -366,11 +398,11 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
     </p>
   </section>
 
-  <!-- ================= ԺԱՄԱՆԱԱՑՈՒՅՑ ================= -->
+  <!-- ================= ԺԱՄԱՆԱԿԱՑՈՒՅՑ ================= -->
   <section id="timeline">
     <div class="sec-head reveal">
-      <span class="script">Our day</span>
-      <h2>Ժամանակացույց</h2>
+      <span class="script" data-i18n="scriptTl">Մեր օրը</span>
+      <h2 data-i18n="h2Tl">Ժամանակացույց</h2>
       <div class="line"></div>
     </div>
 
@@ -381,9 +413,9 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
         </div>
         <div class="t-card">
           <span class="t-time">11:00</span>
-          <h3>Փեսայի տուն</h3>
-          <p>Արտաշատ ք., Մյասնիկյան 71</p>
-          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Արտաշատ,+Մյասնիկյան+71">Բացել քարտեզը ↗</a>
+          <h3 data-i18n="t1">Փեսայի տուն</h3>
+          <p data-i18n="a1">Արտաշատ ք., Մյասնիկյան 71</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Արտաշատ,+Մյասնիկյան+71" data-i18n="map">Բացել քարտեզը ↗</a>
         </div>
       </li>
 
@@ -393,9 +425,9 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
         </div>
         <div class="t-card">
           <span class="t-time">14:00</span>
-          <h3>Հարսի տուն</h3>
-          <p>Երևան, Ֆուչիկի 1-ին նրբանցք, 5 շենք</p>
-          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Երևան,+Ֆուչիկի+1-ին+նրբանցք,+5">Բացել քարտեզը ↗</a>
+          <h3 data-i18n="t2">Հարսի տուն</h3>
+          <p data-i18n="a2">Երևան, Ֆուչիկի 1-ին նրբանցք, 5 շենք</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Երևան,+Ֆուչիկի+1-ին+նրբանցք,+5" data-i18n="map">Բացել քարտեզը ↗</a>
         </div>
       </li>
 
@@ -405,12 +437,12 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
         </div>
         <div class="t-card">
           <span class="t-time">16:00</span>
-          <h3>Եկեղեցի</h3>
-          <p>Արտաշատ ք., Սուրբ Հովհաննես</p>
-          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Սուրբ+Հովհաննես+եկեղեցի,+Արտաշատ">Բացել քարտեզը ↗</a>
+          <h3 data-i18n="t3">Եկեղեցի</h3>
+          <p data-i18n="a3">Արտաշատ ք., Սուրբ Հովհաննես</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Սուրբ+Հովհաննես+եկեղեցի,+Արտաշատ" data-i18n="map">Բացել քարտեզը ↗</a>
           <figure>
             <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/4C97E4E09-B4A7-4088-BAB4-D5FCDC5943B48451.png" alt="Սուրբ Հովհաննես եկեղեցի, Արտաշատ">
-            <figcaption>Սուրբ Հովհաննես եկեղեցի · Արտաշատ</figcaption>
+            <figcaption data-i18n="cap3">Սուրբ Հովհաննես եկեղեցի · Արտաշատ</figcaption>
           </figure>
         </div>
       </li>
@@ -421,40 +453,37 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
         </div>
         <div class="t-card">
           <span class="t-time">17:00</span>
-          <h3>Ռեստորան «Հրաշք Այգի»</h3>
-          <p>գյուղ Մխչյան</p>
-          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Հրաշք+Այգի+ռեստորան,+Մխչյան">Բացել քարտեզը ↗</a>
+          <h3 data-i18n="t4">Ռեստորան «Հրաշք Այգի»</h3>
+          <p data-i18n="a4">գյուղ Մխչյան</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Հրաշք+Այգի+ռեստորան,+Մխչյան" data-i18n="map">Բացել քարտեզը ↗</a>
           <figure>
             <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/0C97E4E09-B4A7-4088-BAB4-D5FCDC5943B44651.png" alt="Ռեստորան Հրաշք Այգի, գյուղ Մխչյան">
-            <figcaption>«Հրաշք Այգի» · գյուղ Մխչյան</figcaption>
+            <figcaption data-i18n="cap4">«Հրաշք Այգի» · գյուղ Մխչյան</figcaption>
           </figure>
         </div>
       </li>
     </ol>
   </section>
 
-  <!-- ================= ՄՐ ՊԱՀԵՐ (3 լուսանկար) ================= -->
+  <!-- ================= ՄԵ ՊԱՀԵՐ ================= -->
   <section id="gallery">
     <div class="sec-head reveal">
-      <span class="script">Our moments</span>
-      <h2>Մեր պահերը</h2>
+      <span class="script" data-i18n="scriptGal">Մեր պահերը</span>
+      <h2 data-i18n="h2Gal">Մեր պահերը</h2>
       <div class="line"></div>
     </div>
     <div class="gal">
-      <!-- Լուսանկար 1․ փոխարինեք ձեր նկարով -->
       <figure class="pol reveal g1">
-        <img loading="lazy" src="img-02.jpg" alt="Վարուժան և Անահիտ — պահ 1">
+        <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/5c2948b50-8347-40e0-804b-dffa85b480d03406.png" alt="Վարուժան և Անահիտ — պահ 1">
         <figcaption>Վ ♥ Ա</figcaption>
       </figure>
-      <!-- Լուսանկար 2 -->
       <figure class="pol reveal g2">
-        <img loading="lazy" src="img-03.jpg" alt="Վարուժան և Անահիտ — պահ 2">
-        <figcaption>Մեր սերը</figcaption>
+        <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/3c2948b50-8347-40e0-804b-dffa85b480d03744.png" alt="Վարուժան և Անահիտ — պահ 2">
+        <figcaption data-i18n="capG2">Մեր սերը</figcaption>
       </figure>
-      <!-- Լուսանկար 3 -->
       <figure class="pol reveal g3">
-        <img loading="lazy" src="img-04.jpg" alt="Վարուժան և Անահիտ — պահ 3">
-        <figcaption>Ընդմիշտ միասին</figcaption>
+        <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/2c2948b50-8347-40e0-804b-dffa85b480d02369.png" alt="Վարուժան և Անահիտ — պահ 3">
+        <figcaption data-i18n="capG3">Ընդմիշտ միասին</figcaption>
       </figure>
     </div>
   </section>
@@ -463,58 +492,59 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
   <section id="rsvp">
     <div class="sec-head reveal">
       <span class="script">RSVP</span>
-      <h2>Հաստատեք Ձեր ներկայությունը</h2>
+      <h2 data-i18n="h2Rsvp">Հաստատեք Ձեր ներկայությունը</h2>
       <div class="line"></div>
     </div>
 
     <div class="rsvp-card reveal">
       <form id="rsvpForm" novalidate>
         <div class="field">
-          <label for="fName">Անուն, ազգանուն *</label>
-          <input type="text" id="fName" name="name" placeholder="Ձեր անունը" required autocomplete="name">
+          <label for="fName" data-i18n="lblName">Անուն, ազգանուն *</label>
+          <input type="text" id="fName" name="name" placeholder="Ձեր անունը" required autocomplete="name" data-i18n-ph="phName">
         </div>
 
         <div class="field">
-          <label>Կմասնակցե՞ք հարսանիքին *</label>
+          <label data-i18n="lblAtt">Կմասնակցե՞ք հարսանիքին *</label>
           <div class="pills">
             <input type="radio" id="attYes" name="attend" value="yes" checked>
-            <label for="attYes">🎉 Ուրախությամբ կմասնակցեմ</label>
+            <label for="attYes" data-i18n="attY">🎉 Ուրախությամբ կմասնակցեմ</label>
             <input type="radio" id="attNo" name="attend" value="no">
-            <label for="attNo">😔 Ցավոք, չեմ կարողանա</label>
+            <label for="attNo" data-i18n="attN">😔 Ցավոք, չեմ կարողանա</label>
           </div>
         </div>
 
         <div class="field">
-          <label for="fGuests">Հյուրերի քանակը</label>
+          <label for="fGuests" data-i18n="lblGuests">Հյուրերի քանակը</label>
           <select id="fGuests" name="guests">
-            <option value="1">1 հոգի</option>
-            <option value="2" selected>2 հոգի</option>
-            <option value="3">3 հոգի</option>
-            <option value="4">4 հոգի</option>
-            <option value="5">5 հոգի</option>
-            <option value="6+">6 և ավելի</option>
+            <option value="1" data-i18n="g1">1 հոգի</option>
+            <option value="2" selected data-i18n="g2">2 հոգի</option>
+            <option value="3" data-i18n="g3">3 հոգի</option>
+            <option value="4" data-i18n="g4">4 հոգի</option>
+            <option value="5" data-i18n="g5">5 հոգի</option>
+            <option value="6+" data-i18n="g6">6 և ավելի</option>
           </select>
         </div>
 
         <div class="field">
-          <label for="fMsg">Մաղթանք կամ նշում (ըստ ցանկության)</label>
-          <textarea id="fMsg" name="msg" rows="3" placeholder="Գրեք ձեր մաղթանքը…"></textarea>
+          <label for="fMsg" data-i18n="lblMsg">Մաղթանք կամ նշում (ըստ ցանկության)</label>
+          <textarea id="fMsg" name="msg" rows="3" placeholder="Գրեք ձեր մաղթանքը…" data-i18n-ph="phMsg"></textarea>
         </div>
 
         <button class="btn-send" type="submit">
           <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.5-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1.1-1.4-1.1-2.7 0-1.3.7-1.9.9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.2.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.6.8 1.9.9.3.2.5.2.5.4.1.1.1.7-.1 1.2z"/></svg>
-          Ուղարկել WhatsApp-ով
+          <span data-i18n="btnSend">Ուղարկել WhatsApp-ով</span>
         </button>
       </form>
-      <p class="wa-note">Կամ գրեք մեզ WhatsApp-ով՝ <a href="https://wa.me/37499915541" target="_blank" rel="noopener">099 915 541</a></p>
+      <p class="wa-note"><span data-i18n="waNote">Կամ գրեք մեզ WhatsApp-ով՝</span> <a href="https://wa.me/37499915541" target="_blank" rel="noopener">099 915 541</a></p>
     </div>
   </section>
 </main>
 
 <footer>
-  <p class="f-names">Վարուժան <span class="amp">&amp;</span> Անահիտ</p>
+  <p class="f-names"><span data-i18n="nameV">Վարուժան</span> <span class="amp">&amp;</span> <span data-i18n="nameA">Անահիտ</span></p>
   <p class="f-date">25 . 08 . 2026</p>
-  <p class="f-love">Պատրաստված է մեծ սիրով <span class="h">♥</span> Սպասում ենք Ձեզ</p>
+  <p class="f-love"><span data-i18n="fLove1">Պատրաստված է մեծ սիրով</span> <span class="h">♥</span> <span data-i18n="fLove2">Սպասում ենք Ձեզ</span></p>
+  <p class="f-sign" data-i18n="signoff">Սիրով Վարուժան և Անահիտ</p>
 </footer>
 
 <button id="musicBtn" aria-label="Միացնել / անջատել երաժշտությունը" aria-pressed="false" title="Երաժշտություն">
@@ -528,7 +558,138 @@ footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:in
 "use strict";
 var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/* ---------- Երաժշտություն․ բեռնվում է էջի բացմանը, հնչում է ծրարը բացելիս ---------- */
+/* ================= I18N — HY / EN / RU ================= */
+var I18N = {
+  hy: {
+    hint:'✉ Հպվեք ծրարին՝ հրավերը բացելու համար',
+    navCd:'Հետհաշվարկ', navTl:'Ժամանակացույց', navGal:'Մեր պահերը',
+    overline:'Մենք ամուսնանում ենք', nameV:'Վարուժան', nameA:'Անահիտ',
+    dear:'Սիրելի բարեկամներ և ընկերներ,',
+    inv1:'Մեծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։',
+    inv2:'Ձեր ներկայությունը կդարձնի մեր երջանկությունը լիարեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։',
+    scriptCd:'Save the date', h2Cd:'Կիսիր այս գեղեցիկ օրը մեզ հետ', cdSub:'Մինչ մեր հարսանիքը մնաց՝',
+    lblD:'Օր', lblH:'Ժամ', lblM:'Րոպե', lblS:'Վայրկյան', cdDate:'Հարսանիքի օրը՝',
+    month:'Օգոստոս 2026', wd:['Երկ','Երք','Չրք','Հնգ','Ուրբ','Շաբ','Կիր'],
+    scriptTl:'Մեր օրը', h2Tl:'Ժամանակացույց',
+    t1:'Փեսայի տուն', a1:'Արտաշատ ք., Մյասնիկյան 71',
+    t2:'Հարսի տուն', a2:'Երևան, Ֆուչիկի 1-ին նրբանցք, 5 շենք',
+    t3:'Եկեղեցի', a3:'Արտաշատ ք., Սուրբ Հովհաննես',
+    t4:'Ռեստորան «Հրաշք Այգի»', a4:'գյուղ Մխչյան',
+    map:'Բացել քարտեզը ↗', cap3:'Սուրբ Հովհաննես եկեղեցի · Արտաշատ', cap4:'«Հրաշք Այգի» · գյուղ Մխչյան',
+    scriptGal:'Մեր պահերը', h2Gal:'Մեր պահերը', capG2:'Մեր սերը', capG3:'Ընդմիշտ միասին',
+    h2Rsvp:'Հաստատեք Ձեր ներկայությունը', lblName:'Անուն, ազգանուն *', phName:'Ձեր անունը',
+    lblAtt:'Կմասնակցե՞ք հարսանիքին *', attY:'🎉 Ուրախությամբ կմասնակցեմ', attN:'😔 Ցավոք, չեմ կարողանա',
+    lblGuests:'Հյուրերի քանակը', g1:'1 հոգի', g2:'2 հոգի', g3:'3 հոգի', g4:'4 հոգի', g5:'5 հոգի', g6:'6 և ավելի',
+    lblMsg:'Մաղթանք կամ նշում (ըստ ցանկության)', phMsg:'Գրեք ձեր մաղթանքը…',
+    btnSend:'Ուղարկել WhatsApp-ով', waNote:'Կամ գրեք մեզ WhatsApp-ով՝',
+    fLove1:'Պատրաստված է մեծ սիրով', fLove2:'Սպասում ենք Ձեզ',
+    signoff:'Սիրով Վարուժան և Անահիտ',
+    toastName:'Խնդրում ենք լրացնել Ձեր անունը 🙏', toastThanks:'Շնորհակալություն, ', toastWa:' ♥ Պատասխանը կբացվի WhatsApp-ում',
+    waHello:'Բարև ձեզ 💌 Ես ', waYes:'✅ Ուրախությամբ կմասնակցեմ Ձեր հարսանիքին։', waNo:'❌ Ցավոք, չեմ կարողանա մասնակցել։',
+    waGuests:'👥 Հյուրերի քանակը՝ ', waNames:'Վարուժան և Անահիտ, 25.08.2026 ♥',
+    musicAria:'Միացնել / անջատել երաժշտությունը', musicTitle:'Երաժշտություն'
+  },
+  en: {
+    hint:'✉ Tap the envelope to open the invitation',
+    navCd:'Countdown', navTl:'Timeline', navGal:'Our moments',
+    overline:'We are getting married', nameV:'Varuzhan', nameA:'Anahit',
+    dear:'Dear relatives and friends,',
+    inv1:'With great love, we invite you to share the most memorable and most anticipated day of our lives.',
+    inv2:'Your presence will make our happiness complete and our day even warmer and unforgettable.',
+    scriptCd:'Save the date', h2Cd:'Share this beautiful day with us', cdSub:'Until our wedding:',
+    lblD:'Days', lblH:'Hours', lblM:'Minutes', lblS:'Seconds', cdDate:'Wedding day:',
+    month:'August 2026', wd:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    scriptTl:'Our day', h2Tl:'Timeline',
+    t1:"Groom's home", a1:'Artashat, Myasnikyan 71',
+    t2:"Bride's home", a2:'Yerevan, Fuchik 1st lane, building 5',
+    t3:'Church', a3:'Artashat, St. Hovhannes Church',
+    t4:'Restaurant "Hrashq Aygi"', a4:'Mkhchyan village',
+    map:'Open map ↗', cap3:'St. Hovhannes Church · Artashat', cap4:'"Hrashq Aygi" · Mkhchyan village',
+    scriptGal:'Our moments', h2Gal:'Our moments', capG2:'Our love', capG3:'Forever together',
+    h2Rsvp:'Confirm your presence', lblName:'Name, surname *', phName:'Your name',
+    lblAtt:'Will you attend the wedding? *', attY:'🎉 I will gladly attend', attN:"😔 Unfortunately, I can't",
+    lblGuests:'Number of guests', g1:'1 guest', g2:'2 guests', g3:'3 guests', g4:'4 guests', g5:'5 guests', g6:'6 or more',
+    lblMsg:'Wish or note (optional)', phMsg:'Write your wish…',
+    btnSend:'Send via WhatsApp', waNote:'Or message us on WhatsApp:',
+    fLove1:'Made with lots of love', fLove2:'We are waiting for you',
+    signoff:'With love, Varuzhan & Anahit',
+    toastName:'Please fill in your name 🙏', toastThanks:'Thank you, ', toastWa:' ♥ Your reply will open in WhatsApp',
+    waHello:'Hello 💌 I am ', waYes:'✅ I will gladly attend your wedding.', waNo:'❌ Unfortunately, I cannot attend.',
+    waGuests:'👥 Number of guests: ', waNames:'Varuzhan & Anahit, 25.08.2026 ♥',
+    musicAria:'Turn music on / off', musicTitle:'Music'
+  },
+  ru: {
+    hint:'✉ Нажмите на конверт, чтобы открыть приглашение',
+    navCd:'Отсчёт', navTl:'Расписание', navGal:'Наши моменты',
+    overline:'Мы женимся', nameV:'Варужан', nameA:'Анаит',
+    dear:'Дорогие родственники и друзья,',
+    inv1:'С большой любовью мы приглашаем вас разделить самый памятный и долгожданный день нашей жизни.',
+    inv2:'Ваше присутствие сделает наше счастье полным, а наш день — ещё теплее и незабываемее.',
+    scriptCd:'Save the date', h2Cd:'Разделите этот прекрасный день с нами', cdSub:'До нашей свадьбы осталось:',
+    lblD:'Дней', lblH:'Часов', lblM:'Минут', lblS:'Секунд', cdDate:'День свадьбы:',
+    month:'Август 2026', wd:['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],
+    scriptTl:'Наш день', h2Tl:'Расписание дня',
+    t1:'Дом жениха', a1:'г. Арташат, ул. Мясникяна 71',
+    t2:'Дом невесты', a2:'Ереван, 1-й переулок Фучика, дом 5',
+    t3:'Церковь', a3:'г. Арташат, церковь Сурб Ованнес',
+    t4:'Ресторан «Храшк Айги»', a4:'село Мхчян',
+    map:'Открыть карту ↗', cap3:'Церковь Сурб Ованнес · Арташат', cap4:'«Храшк Айги» · село Мхчян',
+    scriptGal:'Наши моменты', h2Gal:'Наши моменты', capG2:'Наша любовь', capG3:'Вместе навсегда',
+    h2Rsvp:'Подтвердите своё присутствие', lblName:'Имя, фамилия *', phName:'Ваше имя',
+    lblAtt:'Вы придёте на свадьбу? *', attY:'🎉 С радостью приду', attN:'😔 К сожалению, не смогу',
+    lblGuests:'Количество гостей', g1:'1 гость', g2:'2 гостя', g3:'3 гостя', g4:'4 гостя', g5:'5 гостей', g6:'6 и более',
+    lblMsg:'Пожелание или заметка (по желанию)', phMsg:'Напишите ваше пожелание…',
+    btnSend:'Отправить через WhatsApp', waNote:'Или напишите нам в WhatsApp:',
+    fLove1:'Сделано с большой любовью', fLove2:'Ждём вас',
+    signoff:'С любовью, Варужан и Анаит',
+    toastName:'Пожалуйста, укажите ваше имя 🙏', toastThanks:'Спасибо, ', toastWa:' ♥ Ответ откроется в WhatsApp',
+    waHello:'Здравствуйте 💌 Я — ', waYes:'✅ С радостью приду на вашу свадьбу.', waNo:'❌ К сожалению, не смогу прийти.',
+    waGuests:'👥 Количество гостей: ', waNames:'Варужан и Анаит, 25.08.2026 ♥',
+    musicAria:'Включить / выключить музыку', musicTitle:'Музыка'
+  }
+};
+var cur = 'hy';
+function applyLang(l){
+  cur = l;
+  var d = I18N[l];
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k = el.getAttribute('data-i18n');
+    if(d[k] !== undefined) el.textContent = d[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    var k = el.getAttribute('data-i18n-ph');
+    if(d[k] !== undefined) el.placeholder = d[k];
+  });
+  var mb = document.getElementById('musicBtn');
+  mb.setAttribute('aria-label', d.musicAria);
+  mb.setAttribute('title', d.musicTitle);
+  document.querySelectorAll('.langs button').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-lang') === l);
+  });
+  renderCalendar();
+}
+document.querySelectorAll('.langs button').forEach(function(b){
+  b.addEventListener('click', function(){ applyLang(b.getAttribute('data-lang')); });
+});
+
+/* ================= ՕՐԱՑՈՒՅՑ — Օգոստոս 2026 (25 = ♥) ================= */
+var CAL_OFFSET = 5; /* Օգոստոսի 1-ը շաբաթ է (երկուշաբթի-սկսվող աղյուսակում) */
+var CAL_DAYS = 31, CAL_SEL = 25;
+function renderCalendar(){
+  var d = I18N[cur];
+  document.getElementById('calTitle').textContent = d.month;
+  var grid = document.getElementById('calGrid');
+  var html = '';
+  d.wd.forEach(function(w){ html += '<span class="cal-wd">' + w + '</span>'; });
+  for(var i=0;i<CAL_OFFSET;i++) html += '<span class="cal-day empty"></span>';
+  for(var day=1;day<=CAL_DAYS;day++){
+    html += '<span class="cal-day' + (day===CAL_SEL?' sel':'') + '">' + day + '</span>';
+  }
+  grid.innerHTML = html;
+}
+
+/* ================= ԵՐԱԺՇՏՈՒԹՅՈՒՆ ================= */
 var YT_ID = 'ShZ978fBl6Y'; /* Calum Scott — You Are the Reason */
 var player = null, playing = false, loading = false, autoPending = false;
 var btn = document.getElementById('musicBtn');
@@ -561,14 +722,14 @@ function startMusic(){
   if(player && player.playVideo){ player.playVideo(); setMusic(true); }
   else { autoPending = true; }
 }
-loadYT(); /* նախաբեռնում, որպեսզի ծրարը բացելիս անմիջապես հնչի */
+loadYT();
 btn.addEventListener('click', function(){
   if(!player){ startMusic(); return; }
   if(playing){ player.pauseVideo(); setMusic(false); }
   else { player.playVideo(); setMusic(true); }
 });
 
-/* ---------- Ծրար ---------- */
+/* ================= ԾԱՐ ================= */
 var intro = document.getElementById('intro'),
     env = document.getElementById('envelope'),
     opened = false;
@@ -576,7 +737,7 @@ function openEnvelope(){
   if(opened) return; opened = true;
   intro.classList.add('opened');
   env.classList.add('open');
-  startMusic(); /* երգը միանում է հենց ծրարը բացելիս (օգտագործողի սեղմում = թույլատրված autoplay) */
+  startMusic();
   setTimeout(function(){ intro.classList.add('fade'); }, 4300);
   setTimeout(function(){
     intro.style.display = 'none';
@@ -588,7 +749,7 @@ env.addEventListener('keydown', function(e){
   if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openEnvelope(); }
 });
 
-/* ---------- Հետհաշվարկ ---------- */
+/* ================= ՀԵՏՀԱՇՎԱՐԿ ================= */
 var TARGET = new Date('2026-08-25T11:00:00+04:00').getTime();
 var elD=document.getElementById('cdD'), elH=document.getElementById('cdH'),
     elM=document.getElementById('cdM'), elS=document.getElementById('cdS');
@@ -603,7 +764,6 @@ function tickCd(){
   var diff = TARGET - Date.now();
   if(diff <= 0){
     setNum(elD,'0'); setNum(elH,'00'); setNum(elM,'00'); setNum(elS,'00');
-    document.querySelector('.cd-sub').textContent = 'Այսօր մեր հարսանիքն է 🎉';
     return;
   }
   setNum(elD, String(Math.floor(diff/86400000)));
@@ -613,7 +773,7 @@ function tickCd(){
 }
 tickCd(); setInterval(tickCd, 1000);
 
-/* ---------- Scroll reveal ---------- */
+/* ================= SCROLL REVEAL ================= */
 var io = new IntersectionObserver(function(entries){
   entries.forEach(function(en){
     if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
@@ -621,7 +781,7 @@ var io = new IntersectionObserver(function(entries){
 },{threshold:.15});
 document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
-/* ---------- Նուրբ սպիտակ փետուրներ ---------- */
+/* ================= ՍՊԻՏԱԿ ՓՏՈՒՐՆԵ ================= */
 var cv = document.getElementById('petals'), ctx = cv.getContext('2d'), F = [];
 function sizeCv(){ cv.width = innerWidth; cv.height = innerHeight; }
 sizeCv(); addEventListener('resize', sizeCv);
@@ -673,8 +833,8 @@ if(!reduced){
   })();
 }
 
-/* ---------- RSVP → WhatsApp ---------- */
-var WA = '37499915541'; /* 099 915 541 */
+/* ================= RSVP → WhatsApp ================= */
+var WA = '37499915541';
 var toast = document.getElementById('toast'), toastT;
 function showToast(msg){
   toast.textContent = msg; toast.classList.add('show');
@@ -682,21 +842,23 @@ function showToast(msg){
 }
 document.getElementById('rsvpForm').addEventListener('submit', function(e){
   e.preventDefault();
+  var d = I18N[cur];
   var name = document.getElementById('fName').value.trim();
-  if(!name){ showToast('Խնդրում ենք լրացնել Ձեր անունը 🙏'); document.getElementById('fName').focus(); return; }
+  if(!name){ showToast(d.toastName); document.getElementById('fName').focus(); return; }
   var attend = document.querySelector('input[name="attend"]:checked').value;
   var guests = document.getElementById('fGuests').value;
   var msg = document.getElementById('fMsg').value.trim();
-  var text = 'Բարև ձեզ 💌 Ես ' + name + ' եմ։\n' +
-             (attend === 'yes'
-                ? '✅ Ուրախությամբ կմասնակցեմ Ձեր հարսանիքին։'
-                : '❌ Ցավոք, չեմ կարողանա մասնակցել։') + '\n' +
-             '👥 Հյուրերի քանակը՝ ' + guests +
+  var text = d.waHello + name + '։\n' +
+             (attend === 'yes' ? d.waYes : d.waNo) + '\n' +
+             d.waGuests + guests +
              (msg ? '\n💬 ' + msg : '') + '\n' +
-             'Վարուժան և Անահիտ, 25.08.2026 ♥';
+             d.waNames;
   window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(text), '_blank');
-  showToast('Շնորհակալություն, ' + name + ' ♥ Պատասխանը կբացվի WhatsApp-ում');
+  showToast(d.toastThanks + name + d.toastWa);
 });
+
+/* init */
+applyLang('hy');
 })();
 </script>
 </body>
