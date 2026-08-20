@@ -2,1201 +2,629 @@
 <!DOCTYPE html>
 <html lang="hy">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Վարուժան և Անահիտ - Հարսանիքի Հրավեր</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-color: #efefef;
-            --gold: #D4AF37;
-            --gold-light: #F4E8C1;
-            --text-dark: #4A4A4A;
-            --text-light: #7A7A7A;
-            --white: #ffffff;
-        }
-
-        body {
-            font-family: 'Cormorant Garamond', serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            overflow-x: hidden;
-            min-height: 100vh;
-        }
-
-        /* YouTube Player Hidden */
-        #youtubePlayer {
-            position: fixed;
-            top: -9999px;
-            left: -9999px;
-            width: 1px;
-            height: 1px;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Falling Feathers */
-        .feathers-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        }
-
-        .feather {
-            position: absolute;
-            top: -50px;
-            width: 30px;
-            height: 40px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 100%);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            animation: fall linear infinite;
-            opacity: 0.6;
-            box-shadow: 0 0 10px rgba(255,255,255,0.3);
-        }
-
-        .feather::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: rgba(255,255,255,0.6);
-            transform: translateY(-50%);
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-100px) rotate(0deg) translateX(0px);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg) translateX(100px);
-                opacity: 0;
-            }
-        }
-
-        /* Envelope Section */
-        .envelope-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: var(--bg-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            transition: opacity 1s ease, visibility 1s ease;
-        }
-
-        .envelope-container.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .envelope-wrapper {
-            position: relative;
-            width: 500px;
-            height: 400px;
-        }
-
-        .envelope {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .envelope:hover {
-            transform: scale(1.05);
-        }
-
-        .envelope-body {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
-            border: 2px solid var(--gold-light);
-            border-radius: 0 0 10px 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
-            border: 2px solid var(--gold-light);
-            border-bottom: none;
-            clip-path: polygon(0 0, 50% 100%, 100% 0);
-            transform-origin: top;
-            transition: transform 1s ease;
-            z-index: 10;
-        }
-
-        .envelope.open .envelope-flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        /* Photo emerging from envelope */
-        .emerging-photo {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            height: 85%;
-            background: white;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            opacity: 0;
-            z-index: 5;
-            transition: all 1.5s ease 0.5s;
-        }
-
-        .envelope.open .emerging-photo {
-            opacity: 1;
-            animation: emergeFromEnvelope 2.5s ease forwards;
-        }
-
-        @keyframes emergeFromEnvelope {
-            0% {
-                transform: translateX(-50%) translateY(0) scale(0.8);
-                bottom: 20px;
-            }
-            40% {
-                transform: translateX(-50%) translateY(-100px) scale(1);
-                bottom: 100px;
-            }
-            100% {
-                transform: translateX(-50%) translateY(-150px) scale(1.2);
-                bottom: 200px;
-            }
-        }
-
-        .emerging-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .rings-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20;
-            opacity: 1;
-            transition: opacity 0.5s ease;
-        }
-
-        .envelope.open .rings-overlay {
-            opacity: 0;
-        }
-
-        .ring {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border: 8px solid var(--gold);
-            border-radius: 50%;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-        }
-
-        .ring:first-child {
-            left: -60px;
-            top: 20px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .ring:last-child {
-            right: -60px;
-            top: 20px;
-            animation: float 3s ease-in-out infinite 1.5s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .click-hint {
-            position: absolute;
-            bottom: -80px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--text-light);
-            font-size: 1.2rem;
-            animation: pulse 2s infinite;
-            font-family: 'Playfair Display', serif;
-            white-space: nowrap;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        /* Main Content */
-        .main-content {
-            opacity: 0;
-            transition: opacity 2s ease;
-            position: relative;
-            z-index: 10;
-            display: none;
-        }
-
-        .main-content.visible {
-            opacity: 1;
-            display: block;
-        }
-
-        /* Music Button */
-        .music-control {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background: var(--gold);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
-            transition: transform 0.3s ease;
-            border: none;
-        }
-
-        .music-control:hover {
-            transform: scale(1.1);
-        }
-
-        .music-control.playing {
-            animation: rotate 3s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .music-control i {
-            color: white;
-            font-size: 1.5rem;
-        }
-
-        /* Header Section */
-        .header-section {
-            text-align: center;
-            padding: 60px 20px 40px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .couple-names {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.5rem;
-            color: var(--text-dark);
-            margin-bottom: 20px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            animation: fadeInDown 2s ease;
-        }
-
-        .ampersand {
-            color: var(--gold);
-            font-style: italic;
-            font-size: 2.5rem;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .invitation-text {
-            font-size: 1.3rem;
-            line-height: 2;
-            color: var(--text-light);
-            margin: 40px 0;
-            font-style: italic;
-            animation: fadeIn 2s ease 0.5s both;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Date Section */
-        .date-section {
-            text-align: center;
-            padding: 40px 20px;
-            background: white;
-            margin: 40px auto;
-            max-width: 600px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-            position: relative;
-            animation: fadeIn 2s ease 1s both;
-        }
-
-        .heart-dotted {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            position: relative;
-            border: 3px dotted var(--gold);
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: heartbeat 2s ease-in-out infinite;
-        }
-
-        .heart-dotted::before {
-            content: '♥';
-            font-size: 40px;
-            color: var(--gold);
-        }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .wedding-date {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            color: var(--text-dark);
-            margin: 20px 0;
-            font-weight: 600;
-        }
-
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .countdown-item {
-            background: var(--bg-color);
-            padding: 20px;
-            border-radius: 10px;
-            min-width: 80px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .countdown-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--gold);
-            display: block;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .countdown-label {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .share-text {
-            margin-top: 30px;
-            font-size: 1.4rem;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        /* Photo Gallery */
-        .gallery-section {
-            padding: 60px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .gallery-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: all 0.8s ease;
-        }
-
-        .gallery-item:hover {
-            transform: translateY(-10px);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .gallery-item:nth-child(1) { transition-delay: 0.1s; }
-        .gallery-item:nth-child(2) { transition-delay: 0.2s; }
-        .gallery-item:nth-child(3) { transition-delay: 0.3s; }
-        .gallery-item:nth-child(4) { transition-delay: 0.4s; }
-
-        /* Schedule Section */
-        .schedule-section {
-            padding: 80px 20px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 50px;
-            color: var(--text-dark);
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--gold);
-        }
-
-        .timeline {
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
-        }
-
-        .timeline-item {
-            margin-bottom: 50px;
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-
-        .timeline-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            width: 90%;
-            max-width: 450px;
-            position: relative;
-            transition: transform 0.3s ease;
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-5px);
-        }
-
-        .timeline-item:nth-child(odd) .timeline-content {
-            margin-right: auto;
-            margin-left: 0;
-        }
-
-        .timeline-item:nth-child(even) .timeline-content {
-            margin-left: auto;
-            margin-right: 0;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: var(--gold);
-            border-radius: 50%;
-            border: 4px solid var(--bg-color);
-            top: 30px;
-            z-index: 10;
-        }
-
-        .timeline-time {
-            font-size: 1.5rem;
-            color: var(--gold);
-            font-weight: 700;
-            margin-bottom: 10px;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .timeline-title {
-            font-size: 1.3rem;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .timeline-location {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
-
-        .venue-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        /* RSVP Section */
-        .rsvp-section {
-            background: white;
-            padding: 80px 20px;
-            margin-top: 60px;
-        }
-
-        .rsvp-container {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .rsvp-form {
-            background: var(--bg-color);
-            padding: 40px;
-            border-radius: 20px;
-            margin-top: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid var(--gold-light);
-            border-radius: 10px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            transition: border-color 0.3s ease;
-            background: white;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--gold);
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 30px;
-            margin-top: 10px;
-        }
-
-        .radio-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .radio-item input[type="radio"] {
-            width: auto;
-            cursor: pointer;
-        }
-
-        .submit-btn {
-            background: var(--gold);
-            color: white;
-            border: none;
-            padding: 18px 50px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            cursor: pointer;
-            font-family: 'Playfair Display', serif;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-        }
-
-        .whatsapp-info {
-            margin-top: 30px;
-            padding: 20px;
-            background: var(--bg-color);
-            border-radius: 10px;
-            border: 2px dashed var(--gold-light);
-        }
-
-        .whatsapp-info a {
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .whatsapp-info a:hover {
-            text-decoration: underline;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        .footer-hearts {
-            color: var(--gold);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .couple-names {
-                font-size: 2.5rem;
-            }
-
-            .envelope-wrapper {
-                width: 350px;
-                height: 300px;
-            }
-
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .gallery-item img {
-                height: 300px;
-            }
-
-            .timeline::before {
-                left: 20px;
-            }
-
-            .timeline-item {
-                justify-content: flex-start;
-                padding-left: 50px;
-            }
-
-            .timeline-dot {
-                left: 20px;
-            }
-
-            .timeline-item:nth-child(odd) .timeline-content,
-            .timeline-item:nth-child(even) .timeline-content {
-                margin-left: 0;
-                margin-right: 0;
-            }
-
-            .countdown-item {
-                min-width: 60px;
-                padding: 15px 10px;
-            }
-
-            .countdown-number {
-                font-size: 2rem;
-            }
-        }
-
-        /* Scroll animations */
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .fade-in-section.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Վարուժան &amp; Անահիտ | Հարսանյաց հրավեր | 25.08.2026</title>
+<meta name="description" content="Վարուժանի և Անահիտի հարսանյաց հրավեր — 25.08.2026։ Կիսիր այս գեղեցիկ օրը մեզ հետ ♥">
+<meta name="theme-color" content="#f6e7e4">
+<meta property="og:title" content="Վարուժան & Անահիտ — Հարսանյաց հրավեր">
+<meta property="og:description" content="25.08.2026 — Կիսիր այս գեղեցիկ օրը մեզ հետ ♥">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💍</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Armenian:wght@400;600;700&family=Noto+Sans+Armenian:wght@300;400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   ՎԱՐՈՒԺԱՆ & ԱՆԱՀԻՏ — 25.08.2026
+============================================================ */
+:root{
+  --ivory:#fdfaf6; --blush:#f6e7e4; --blush-2:#f0d9d3;
+  --rose:#c96f6f; --rose-soft:#d98b8b;
+  --gold:#c6a15b; --gold-dark:#a9853f;
+  --ink:#4a3f3a; --ink-soft:#7a6c64; --white:#fff;
+  --shadow:0 20px 60px rgba(74,63,58,.15);
+  --serif:'Noto Serif Armenian',serif;
+  --sans:'Noto Sans Armenian',sans-serif;
+  --script:'Great Vibes',cursive;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--ivory);color:var(--ink);overflow-x:hidden;line-height:1.7}
+img{max-width:100%;display:block}
+h1,h2,h3{font-family:var(--serif);line-height:1.25}
+::selection{background:var(--rose-soft);color:#fff}
+section{scroll-margin-top:70px}
+#petals{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ================= ENVELOPE INTRO ================= */
+#intro{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;flex-direction:column;
+  background:radial-gradient(circle at 50% 20%, #fff 0%, var(--blush) 55%, var(--blush-2) 100%);
+  transition:opacity .9s ease, visibility .9s}
+#intro.fade{opacity:0;visibility:hidden;pointer-events:none}
+.intro-hint{font-family:var(--serif);color:var(--ink-soft);letter-spacing:.06em;margin-bottom:26px;
+  font-size:clamp(.95rem,2.5vw,1.15rem);animation:hintPulse 2s ease-in-out infinite}
+#intro.opened .intro-hint{opacity:0;transition:opacity .4s}
+@keyframes hintPulse{0%,100%{opacity:.55;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+
+.envelope{position:relative;width:min(88vw,430px);aspect-ratio:8/5.4;cursor:pointer;perspective:1400px;outline:none;
+  filter:drop-shadow(0 30px 45px rgba(74,63,58,.28));transition:transform .5s ease}
+.envelope:hover,.envelope:focus-visible{transform:translateY(-6px) scale(1.01)}
+.env-back{position:absolute;inset:0;background:var(--white);border-radius:10px;z-index:1;box-shadow:inset 0 0 25px rgba(74,63,58,.08)}
+
+/* IMG-01 քարտը, որը դանդաղ բարձրանում է */
+.env-card{position:absolute;left:5%;right:5%;top:7%;bottom:7%;z-index:2;background:var(--white);border-radius:8px;overflow:hidden;
+  box-shadow:0 6px 22px rgba(74,63,58,.18);display:flex;flex-direction:column;
+  transition:transform 3.4s cubic-bezier(.22,.8,.3,1) 1s, z-index 0s 1s}
+.env-card img{width:100%;height:78%;object-fit:cover}
+.env-card-txt{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px}
+.env-card-names{font-family:var(--serif);font-weight:600;color:var(--ink);font-size:clamp(.9rem,3vw,1.15rem)}
+.env-card-names .amp{font-family:var(--script);color:var(--rose);font-size:1.3em;padding:0 .15em}
+.env-card-date{color:var(--gold-dark);letter-spacing:.25em;font-size:.72rem;font-weight:600}
+.envelope.open .env-card{transform:translateY(-112%);z-index:7}
+
+.env-pocket{position:absolute;inset:0;z-index:3;border-radius:10px;
+  background:linear-gradient(180deg,#ffffff 0%,#f7f2ec 100%);
+  clip-path:polygon(0 0, 50% 46%, 100% 0, 100% 100%, 0 100%);
+  box-shadow:inset 0 -8px 22px rgba(74,63,58,.06)}
+.env-rings{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);z-index:4;width:34%;pointer-events:none}
+.env-rings svg{width:100%;overflow:visible;animation:ringShine 2.6s ease-in-out infinite}
+@keyframes ringShine{0%,100%{opacity:.85}50%{opacity:1;filter:drop-shadow(0 0 6px rgba(198,161,91,.8))}}
+
+.env-flap{position:absolute;left:0;right:0;top:0;height:52%;z-index:6;border-radius:10px 10px 0 0;
+  background:linear-gradient(180deg,#ffffff 0%,#efe7df 100%);
+  clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top center;
+  transition:transform 1.2s cubic-bezier(.6,.05,.3,1) .15s, z-index 0s .7s}
+.env-flap::after{content:"♥";position:absolute;left:50%;top:78%;transform:translate(-50%,-50%);
+  width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%, #e29a9a, var(--rose) 70%);
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:1}
+
+/* ================= TOP BAR ================= */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:90;display:flex;align-items:center;justify-content:space-between;
+  padding:12px clamp(16px,4vw,48px);background:rgba(253,250,246,.85);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(198,161,91,.25);transform:translateY(-110%);transition:transform .9s ease .2s}
+body.ready .topbar{transform:translateY(0)}
+.mono{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1.05rem;display:flex;align-items:center;gap:.45em}
+.mono .h{color:var(--rose);animation:heartbeat 1.8s ease-in-out infinite;display:inline-block}
+.topbar nav{display:flex;gap:clamp(10px,2.5vw,28px)}
+.topbar nav a{text-decoration:none;color:var(--ink-soft);font-size:.86rem;letter-spacing:.05em;padding:6px 2px;position:relative;transition:color .3s}
+.topbar nav a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:2px;background:var(--gold);transition:width .3s}
+.topbar nav a:hover{color:var(--gold-dark)}
+.topbar nav a:hover::after{width:100%}
+@media(max-width:560px){.topbar nav a:first-child{display:none}}
+
+/* ================= HERO ================= */
+main{position:relative;z-index:1}
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:110px 20px 70px;position:relative;
+  background:radial-gradient(circle at 15% 20%, rgba(217,139,139,.14), transparent 40%),
+             radial-gradient(circle at 85% 75%, rgba(198,161,91,.14), transparent 42%), var(--ivory)}
+.hero .overline{letter-spacing:.45em;text-transform:uppercase;color:var(--gold-dark);font-size:.78rem;font-weight:600;margin-bottom:14px}
+.hero-photo{width:clamp(190px,32vw,270px);aspect-ratio:4/5;object-fit:cover;border-radius:999px 999px 18px 18px;
+  border:6px solid #fff;outline:1px solid rgba(198,161,91,.5);outline-offset:6px;box-shadow:var(--shadow);
+  margin:0 auto 26px;animation:floaty 6s ease-in-out infinite}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero h1{font-size:clamp(2.1rem,7vw,4.2rem);font-weight:700;color:var(--ink)}
+.hero h1 .amp{font-family:var(--script);color:var(--rose);font-size:1.25em;padding:0 .12em;font-weight:400}
+.date-line{display:flex;align-items:center;justify-content:center;gap:.55em;margin:18px 0 26px;font-family:var(--serif);
+  font-size:clamp(1.25rem,4.5vw,2rem);color:var(--gold-dark);letter-spacing:.12em;font-weight:600}
+.date-line .heart{width:1.05em;height:1.05em;fill:var(--rose);animation:heartbeat 1.6s ease-in-out infinite}
+.date-line .heart:nth-of-type(2){animation-delay:.8s}
+@keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.25)}45%{transform:scale(1.05)}60%{transform:scale(1.22)}}
+.invite-text{max-width:640px;color:var(--ink-soft);font-size:clamp(.98rem,2.6vw,1.12rem)}
+.invite-text .dear{font-family:var(--serif);color:var(--ink);font-weight:600;display:block;margin-bottom:8px;font-size:1.15em}
+.scroll-cue{margin-top:44px;width:26px;height:44px;border:2px solid var(--gold);border-radius:20px;position:relative;opacity:.8}
+.scroll-cue::before{content:"";position:absolute;left:50%;top:8px;width:5px;height:9px;border-radius:4px;background:var(--rose);
+  transform:translateX(-50%);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%{opacity:1;top:8px}70%{opacity:0;top:24px}100%{opacity:0;top:8px}}
+
+.hero .anim{opacity:0}
+body.ready .hero .anim{animation:fadeUp 1s ease forwards}
+body.ready .hero .anim.d1{animation-delay:.15s}
+body.ready .hero .anim.d2{animation-delay:.35s}
+body.ready .hero .anim.d3{animation-delay:.55s}
+body.ready .hero .anim.d4{animation-delay:.75s}
+body.ready .hero .anim.d5{animation-delay:.95s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+
+/* ================= SECTIONS ================= */
+section{padding:clamp(70px,10vw,110px) 20px;position:relative}
+.sec-head{text-align:center;margin-bottom:clamp(40px,6vw,64px)}
+.sec-head .script{font-family:var(--script);color:var(--rose);font-size:clamp(1.4rem,4vw,2rem);display:block;margin-bottom:4px}
+.sec-head h2{font-size:clamp(1.7rem,5vw,2.6rem);color:var(--ink)}
+.sec-head .line{width:70px;height:2px;background:var(--gold);margin:16px auto 0;position:relative}
+.sec-head .line::after{content:"♥";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  color:var(--rose);font-size:.9rem;background:var(--ivory);padding:0 8px}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:translateY(0)}
+
+/* ================= COUNTDOWN ================= */
+#countdown{background:linear-gradient(180deg,var(--blush) 0%,var(--ivory) 100%)}
+.cd-sub{text-align:center;color:var(--ink-soft);margin-bottom:34px;font-size:clamp(.95rem,2.5vw,1.1rem)}
+.cd-grid{display:flex;justify-content:center;gap:clamp(10px,2.5vw,26px);flex-wrap:wrap}
+.cd-box{background:#fff;border:1px solid rgba(198,161,91,.35);border-radius:16px;min-width:clamp(74px,18vw,120px);
+  padding:clamp(14px,3vw,26px) 10px;text-align:center;box-shadow:0 12px 30px rgba(74,63,58,.1);position:relative;overflow:hidden}
+.cd-box::before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--rose-soft),var(--gold))}
+.cd-num{font-family:var(--serif);font-size:clamp(1.8rem,6vw,3rem);font-weight:700;color:var(--ink);line-height:1}
+.cd-num.tick{animation:tick .5s ease}
+@keyframes tick{0%{transform:translateY(-8px);opacity:.2}100%{transform:translateY(0);opacity:1}}
+.cd-lbl{margin-top:8px;color:var(--gold-dark);font-size:clamp(.7rem,2vw,.85rem);letter-spacing:.18em;text-transform:uppercase}
+.cd-date{margin-top:38px;text-align:center;font-family:var(--serif);font-size:clamp(1.05rem,3.4vw,1.5rem);color:var(--ink);
+  font-weight:600;display:flex;align-items:center;justify-content:center;gap:.5em;flex-wrap:wrap}
+.cd-date .heart{width:1em;height:1em;fill:var(--rose);animation:heartbeat 1.6s infinite}
+
+/* ================= TIMELINE (dotted) ================= */
+.timeline{list-style:none;max-width:980px;margin:0 auto;position:relative;padding:10px 0}
+.timeline::before{content:"";position:absolute;top:0;bottom:0;left:50%;transform:translateX(-50%);border-left:3px dotted var(--gold)}
+.t-item{display:grid;grid-template-columns:1fr 90px 1fr;align-items:start;margin-bottom:clamp(34px,5vw,54px)}
+.t-node{grid-column:2;grid-row:1;justify-self:center;width:64px;height:64px;border-radius:50%;background:#fff;
+  border:3px dotted var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold-dark);
+  z-index:2;box-shadow:0 8px 20px rgba(74,63,58,.12)}
+.t-node svg{width:30px;height:30px}
+.t-card{background:#fff;border:1px solid rgba(198,161,91,.3);border-radius:16px;padding:22px 24px;
+  box-shadow:0 14px 34px rgba(74,63,58,.1);transition:transform .4s ease, box-shadow .4s ease}
+.t-card:hover{transform:translateY(-6px);box-shadow:0 22px 44px rgba(74,63,58,.16)}
+.t-item:nth-child(odd) .t-card{grid-column:1;grid-row:1;text-align:right}
+.t-item:nth-child(even) .t-card{grid-column:3;grid-row:1}
+.t-time{display:inline-block;background:linear-gradient(90deg,var(--rose-soft),var(--rose));color:#fff;font-weight:600;
+  border-radius:999px;padding:4px 16px;font-size:.85rem;letter-spacing:.12em;margin-bottom:10px;box-shadow:0 4px 12px rgba(201,111,111,.4)}
+.t-card h3{font-size:clamp(1.1rem,3vw,1.4rem);color:var(--ink);margin-bottom:4px}
+.t-card p{color:var(--ink-soft);font-size:.95rem}
+.t-card .map{font-size:.82rem;text-decoration:none;letter-spacing:.06em;white-space:nowrap}
+.t-card .map:hover{text-decoration:underline}
+.t-card figure{margin-top:16px;border-radius:12px;overflow:hidden;border:4px solid #fff;
+  outline:1px solid rgba(198,161,91,.45);box-shadow:0 10px 24px rgba(74,63,58,.15)}
+.t-card figure img{width:100%;aspect-ratio:16/9;object-fit:cover;transition:transform .8s ease}
+.t-card figure:hover img{transform:scale(1.06)}
+.t-card figcaption{padding:8px 10px;font-size:.78rem;color:var(--ink-soft);background:#fff;text-align:center}
+@media(max-width:760px){
+  .timeline::before{left:32px}
+  .t-item{grid-template-columns:64px 1fr;gap:14px}
+  .t-node{grid-column:1;width:52px;height:52px}
+  .t-node svg{width:24px;height:24px}
+  .t-item:nth-child(odd) .t-card,.t-item:nth-child(even) .t-card{grid-column:2;text-align:left}
+}
+
+/* ================= RSVP ================= */
+#rsvp{background:linear-gradient(180deg,var(--ivory) 0%,var(--blush) 100%)}
+.rsvp-card{max-width:640px;margin:0 auto;background:#fff;border-radius:22px;border:1px solid rgba(198,161,91,.35);
+  box-shadow:var(--shadow);padding:clamp(28px,5vw,48px);position:relative;overflow:hidden}
+.rsvp-card::before{content:"♥";position:absolute;top:-38px;right:-24px;font-size:150px;color:var(--blush);transform:rotate(15deg)}
+.rsvp-card form{position:relative;z-index:1;display:grid;gap:20px}
+.field label{display:block;font-weight:600;color:var(--ink);margin-bottom:8px;font-size:.92rem}
+.field input[type=text],.field select,.field textarea{width:100%;border:1.5px solid #e5d9cf;border-radius:12px;padding:12px 16px;
+  font-family:var(--sans);font-size:1rem;color:var(--ink);background:var(--ivory);transition:border-color .3s, box-shadow .3s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(198,161,91,.15);background:#fff}
+.pills{display:flex;gap:12px;flex-wrap:wrap}
+.pills input{position:absolute;opacity:0;pointer-events:none}
+.pills label{cursor:pointer;border:1.5px solid #e5d9cf;border-radius:999px;padding:10px 20px;font-size:.92rem;
+  color:var(--ink-soft);transition:all .3s;background:var(--ivory);user-select:none}
+.pills input:checked + label{background:linear-gradient(90deg,var(--rose-soft),var(--rose));color:#fff;border-color:transparent;
+  box-shadow:0 6px 16px rgba(201,111,111,.35);transform:translateY(-2px)}
+.pills input:focus-visible + label{outline:2px solid var(--gold);outline-offset:2px}
+.btn-send{justify-self:center;border:none;cursor:pointer;border-radius:999px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-dark));color:#fff;font-family:var(--serif);font-weight:600;
+  font-size:1.05rem;letter-spacing:.05em;padding:15px 44px;display:inline-flex;align-items:center;gap:10px;
+  box-shadow:0 12px 28px rgba(169,133,63,.4);transition:transform .3s, box-shadow .3s}
+.btn-send:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(169,133,63,.5)}
+.btn-send svg{width:22px;height:22px;fill:#fff}
+.wa-note{margin-top:22px;text-align:center;color:var(--ink-soft);font-size:.92rem;position:relative;z-index:1}
+.wa-note a{font-weight:700;color:#128c7e;text-decoration:none}
+.wa-note a:hover{text-decoration:underline}
+#toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,140%);z-index:200;background:var(--ink);color:#fff;
+  padding:12px 26px;border-radius:999px;font-size:.92rem;transition:transform .5s ease;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+#toast.show{transform:translate(-50%,0)}
+
+/* ================= FOOTER + MUSIC ================= */
+footer{text-align:center;padding:44px 20px 90px;background:var(--blush);border-top:1px solid rgba(198,161,91,.3);position:relative;z-index:1}
+footer .f-names{font-family:var(--serif);font-weight:700;font-size:1.3rem;color:var(--ink)}
+footer .f-names .amp{font-family:var(--script);color:var(--rose);padding:0 .15em}
+footer .f-date{color:var(--gold-dark);letter-spacing:.3em;margin-top:6px;font-size:.85rem;font-weight:600}
+footer .f-love{margin-top:14px;color:var(--ink-soft);font-size:.85rem}
+footer .f-love .h{color:var(--rose);animation:heartbeat 1.6s infinite;display:inline-block}
+
+#musicBtn{position:fixed;right:22px;bottom:22px;z-index:150;width:60px;height:60px;border-radius:50%;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--rose-soft),var(--rose));box-shadow:0 12px 28px rgba(201,111,111,.45);
+  display:flex;align-items:center;justify-content:center;transition:transform .3s}
+#musicBtn:hover{transform:scale(1.08)}
+#musicBtn svg.note{width:26px;height:26px;fill:#fff;transition:transform .3s}
+#musicBtn .eq{position:absolute;bottom:12px;display:none;gap:3px;align-items:flex-end;height:12px}
+#musicBtn .eq i{width:3px;background:#fff;border-radius:2px;animation:eq 1s ease-in-out infinite}
+#musicBtn .eq i:nth-child(1){height:6px}
+#musicBtn .eq i:nth-child(2){height:12px;animation-delay:.2s}
+#musicBtn .eq i:nth-child(3){height:8px;animation-delay:.4s}
+@keyframes eq{0%,100%{transform:scaleY(.4)}50%{transform:scaleY(1)}}
+#musicBtn.playing{animation:halo 1.8s ease-in-out infinite}
+#musicBtn.playing .eq{display:flex}
+#musicBtn.playing svg.note{transform:translateY(-3px)}
+@keyframes halo{0%,100%{box-shadow:0 12px 28px rgba(201,111,111,.45),0 0 0 0 rgba(201,111,111,.5)}50%{box-shadow:0 12px 28px rgba(201,111,111,.45),0 0 0 16px rgba(201,111,111,0)}}
+#yt-holder{position:fixed;width:2px;height:2px;opacity:0;pointer-events:none;left:-99px;top:-99px}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .reveal,.hero .anim{opacity:1!important;transform:none!important}
+}
+</style>
+<noscript><style>#intro{display:none}.hero .anim,.reveal{opacity:1;transform:none}.topbar{transform:none}</style></noscript>
 </head>
+
 <body>
+<canvas id="petals" aria-hidden="true"></canvas>
 
-    <!-- YouTube Player (Hidden) -->
-    <div id="youtubePlayer"></div>
+<!-- ================= ԾՐԱՐ ================= -->
+<div id="intro">
+  <p class="intro-hint">✉ Հպվեք ծրարին՝ հրավերը բացելու համար</p>
+  <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Բացել հարսանյաց հրավերի ծրարը">
+    <div class="env-back"></div>
 
-    <!-- Falling Feathers -->
-    <div class="feathers-container" id="feathersContainer"></div>
+    <!-- IMG-01․ փոխարինեք src-ը ձեր img-01.jpg նկարով -->
+    <div class="env-card">
+      <img src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/5C97E4E09-B4A7-4088-BAB4-D5FCDC5943B46264.png" alt="Վարուժան և Անահիտ">
+      <div class="env-card-txt">
+        <span class="env-card-names">Վարուժան <span class="amp">&amp;</span> Անահիտ</span>
+        <span class="env-card-date">25 . 08 . 2026</span>
+      </div>
+    </div>
 
-    <!-- Envelope Section -->
-    <div class="envelope-container" id="envelopeContainer">
-        <div class="envelope-wrapper">
-            <div class="envelope" id="envelope" onclick="openEnvelope()">
-                <div class="envelope-flap"></div>
-                <div class="envelope-body"></div>
-                
-                <!-- Emerging Photo (img-01) -->
-                <div class="emerging-photo">
-                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800" alt="Վարուժան և Անահիտ" id="img-01">
-                </div>
+    <div class="env-pocket"></div>
 
-                <!-- Rings Overlay (visible before opening) -->
-                <div class="rings-overlay">
-                    <div class="ring"></div>
-                    <div class="ring"></div>
-                </div>
-            </div>
-            <div class="click-hint">Սեղմեք բացելու համար</div>
+    <!-- Երկու հարսանյաց մատանիներ -->
+    <div class="env-rings" aria-hidden="true">
+      <svg viewBox="0 0 120 78">
+        <defs>
+          <linearGradient id="gld" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#e6c98a"/><stop offset=".5" stop-color="#c6a15b"/><stop offset="1" stop-color="#a9853f"/>
+          </linearGradient>
+        </defs>
+        <circle cx="45" cy="46" r="24" fill="none" stroke="url(#gld)" stroke-width="6"/>
+        <circle cx="75" cy="46" r="24" fill="none" stroke="url(#gld)" stroke-width="6"/>
+        <path d="M60 2c-4-7-14-5-14 3 0 7 14 14 14 14s14-7 14-14c0-8-10-10-14-3z" fill="#d98b8b"/>
+      </svg>
+    </div>
+
+    <div class="env-flap"></div>
+  </div>
+</div>
+
+<!-- ================= TOP BAR ================= -->
+<header class="topbar">
+  <span class="mono">Վ <span class="h">♥</span> Ա</span>
+  <nav aria-label="Նավիգացիա">
+    <a href="#countdown">Հետհաշվարկ</a>
+    <a href="#timeline">Ժամանակացույց</a>
+    <a href="#rsvp">RSVP</a>
+  </nav>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero" id="home">
+    <p class="overline anim d1">Մենք ամուսնանում ենք</p>
+    <img class="hero-photo anim d2" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/5C97E4E09-B4A7-4088-BAB4-D5FCDC5943B46264.png" alt="Վարուժան և Անահիտ">
+    <h1 class="anim d3">Վարուժան <span class="amp">&amp;</span> Անահիտ</h1>
+
+    <div class="date-line anim d4" aria-label="25 օգոստոսի 2026">
+      <span>25</span>
+      <svg class="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-10-10C.6 7 3 3.5 6.5 3.5c2.2 0 4 1.3 5.5 3.4 1.5-2.1 3.3-3.4 5.5-3.4C21 3.5 23.4 7 22 11c-2 4.7-10 10-10 10z"/></svg>
+      <span>08</span>
+      <svg class="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-10-10C.6 7 3 3.5 6.5 3.5c2.2 0 4 1.3 5.5 3.4 1.5-2.1 3.3-3.4 5.5-3.4C21 3.5 23.4 7 22 11c-2 4.7-10 10-10 10z"/></svg>
+      <span>2026</span>
+    </div>
+
+    <p class="invite-text anim d5">
+      <span class="dear">Սիրելի բարեկամներ և ընկերներ,</span>
+      Մեծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։<br>
+      Ձեր ներկայությունը կդարձնի մեր երջանկությունը լիարժեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։
+    </p>
+    <div class="scroll-cue anim d5" aria-hidden="true"></div>
+  </section>
+
+  <!-- ================= COUNTDOWN ================= -->
+  <section id="countdown">
+    <div class="sec-head reveal">
+      <span class="script">Save the date</span>
+      <h2>Կիսիր այս գեղեցիկ օրը մեզ հետ</h2>
+      <div class="line"></div>
+    </div>
+    <p class="cd-sub reveal">Մինչ մեր հարսանիքը մնաց՝</p>
+    <div class="cd-grid reveal" role="timer" aria-live="polite">
+      <div class="cd-box"><div class="cd-num" id="cdD">0</div><div class="cd-lbl">Օր</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdH">00</div><div class="cd-lbl">Ժամ</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdM">00</div><div class="cd-lbl">Րոպե</div></div>
+      <div class="cd-box"><div class="cd-num" id="cdS">00</div><div class="cd-lbl">Վայրկյան</div></div>
+    </div>
+    <p class="cd-date reveal">
+      Հարսանիքի օրը՝
+      <span>25</span>
+      <svg class="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-10-10C.6 7 3 3.5 6.5 3.5c2.2 0 4 1.3 5.5 3.4 1.5-2.1 3.3-3.4 5.5-3.4C21 3.5 23.4 7 22 11c-2 4.7-10 10-10 10z"/></svg>
+      <span>08</span>
+      <svg class="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5.3-10-10C.6 7 3 3.5 6.5 3.5c2.2 0 4 1.3 5.5 3.4 1.5-2.1 3.3-3.4 5.5-3.4C21 3.5 23.4 7 22 11c-2 4.7-10 10-10 10z"/></svg>
+      <span>2026</span>
+    </p>
+  </section>
+
+  <!-- ================= ԺԱՄԱՆԱԿԱՑՈՒՅՑ ================= -->
+  <section id="timeline">
+    <div class="sec-head reveal">
+      <span class="script">Our day</span>
+      <h2>Ժամանակացույց</h2>
+      <div class="line"></div>
+    </div>
+
+    <ol class="timeline">
+      <li class="t-item reveal">
+        <div class="t-node" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
         </div>
+        <div class="t-card">
+          <span class="t-time">11:00</span>
+          <h3>Փեսայի տուն</h3>
+          <p>Արտաշատ ք., Մյասնիկյան 71</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Արտաշատ,+Մյասնիկյան+71">Բացել քարտեզը ↗</a>
+        </div>
+      </li>
+
+      <li class="t-item reveal">
+        <div class="t-node" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M12 17s-2.6-1.7-3.2-3.2c-.4-1.2.4-2.3 1.5-2.3.7 0 1.3.4 1.7 1 .4-.6 1-1 1.7-1 1.1 0 1.9 1.1 1.5 2.3C14.6 15.3 12 17 12 17z" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="t-card">
+          <h3>Հարսի տուն</h3>
+          <p>Երևան, Ֆուչիկի 1-ին նրբանցք, 5 շենք</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Երևան,+Ֆուչիկի+1-ին+նրբանցք,+5">Բացել քարտեզը ↗</a>
+        </div>
+      </li>
+
+      <li class="t-item reveal">
+        <div class="t-node" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M10.5 4h3"/><path d="M8 10c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M6 21v-9l6-3 6 3v9"/><path d="M10 21v-4a2 2 0 0 1 4 0v4"/></svg>
+        </div>
+        <div class="t-card">
+          <span class="t-time">16:00</span>
+          <h3>Եկեղեցի</h3>
+          <p>Արտաշատ ք., Սուրբ Հովհաննես</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Սուրբ+Հովհաննես+եկեղեցի,+Արտաշատ">Բացել քարտեզը ↗</a>
+          <figure>
+            <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/4C97E4E09-B4A7-4088-BAB4-D5FCDC5943B48451.png" alt="Սուրբ Հովհաննես եկեղեցի, Արտաշատ">
+            <figcaption>Սուրբ Հովհաննես եկեղեցի · Արտաշատ</figcaption>
+          </figure>
+        </div>
+      </li>
+
+      <li class="t-item reveal">
+        <div class="t-node" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8c0 4.5-1.8 7-4 7s-4-2.5-4-7z"/><path d="M12 10v8"/><path d="M8.5 21h7"/></svg>
+        </div>
+        <div class="t-card">
+          <span class="t-time">17:00</span>
+          <h3>Ռեստորան «Հրաշք Այգի»</h3>
+          <p>գյուղ Մխչյան</p>
+          <a class="map" target="_blank" rel="noopener" href="https://maps.google.com/?q=Հրաշք+Այգի+ռեստորան,+Մխչյան">Բացել քարտեզը ↗</a>
+          <figure>
+            <img loading="lazy" src="https://image.qwenlm.ai/public_source/05ccd58e-9e0a-49e4-be41-028008b6ea81/0C97E4E09-B4A7-4088-BAB4-D5FCDC5943B44651.png" alt="Ռեստորան Հրաշք Այգի, գյուղ Մխչյան">
+            <figcaption>«Հրաշք Այգի» · գյուղ Մխչյան</figcaption>
+          </figure>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= RSVP ================= -->
+  <section id="rsvp">
+    <div class="sec-head reveal">
+      <span class="script">RSVP</span>
+      <h2>Հաստատեք Ձեր ներկայությունը</h2>
+      <div class="line"></div>
     </div>
 
-    <!-- Music Control -->
-    <button class="music-control" id="musicControl" onclick="toggleMusic()">
-        <i class="fas fa-music" id="musicIcon"></i>
-    </button>
+    <div class="rsvp-card reveal">
+      <form id="rsvpForm" novalidate>
+        <div class="field">
+          <label for="fName">Անուն, ազգանուն *</label>
+          <input type="text" id="fName" name="name" placeholder="Ձեր անունը" required autocomplete="name">
+        </div>
 
-    <!-- Main Content -->
-    <div class="main-content" id="mainContent">
-        
-        <!-- Header -->
-        <section class="header-section">
-            <h1 class="couple-names">
-                Վարուժան <span class="ampersand">&</span> Անահիտ
-            </h1>
-            
-            <div class="invitation-text">
-                Սիրելի բարեկամներ և ընկերներ<br>
-                Մեծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։<br>
-                Ձեր ներկայությունը կդարձնի մեր երջանկությունը լիարժեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։
-            </div>
-        </section>
+        <div class="field">
+          <label>Կմասնակցե՞ք հարսանիքին *</label>
+          <div class="pills">
+            <input type="radio" id="attYes" name="attend" value="yes" checked>
+            <label for="attYes">🎉 Ուրախությամբ կմասնակցեմ</label>
+            <input type="radio" id="attNo" name="attend" value="no">
+            <label for="attNo">😔 ավոք, եմ կարողանա</label>
+          </div>
+        </div>
 
-        <!-- Date Section -->
-        <section class="date-section fade-in-section">
-            <div class="heart-dotted"></div>
-            <div class="wedding-date">25.08.2026</div>
-            
-            <div class="countdown" id="countdown">
-                <div class="countdown-item">
-                    <span class="countdown-number" id="days">00</span>
-                    <span class="countdown-label">Օր</span>
-                </div>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="hours">00</span>
-                    <span class="countdown-label">Ժամ</span>
-                </div>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="minutes">00</span>
-                    <span class="countdown-label">Րոպե</span>
-                </div>
-                <div class="countdown-item">
-                    <span class="countdown-number" id="seconds">00</span>
-                    <span class="countdown-label">Վայրկյան</span>
-                </div>
-            </div>
+        <div class="field">
+          <label for="fGuests">Հյուրերի քանակը</label>
+          <select id="fGuests" name="guests">
+            <option value="1">1 հոգի</option>
+            <option value="2" selected>2 հոգի</option>
+            <option value="3">3 հոգի</option>
+            <option value="4">4 հոգի</option>
+            <option value="5">5 հոգի</option>
+            <option value="6+">6 և ավելի</option>
+          </select>
+        </div>
 
-            <div class="share-text">
-                Կիսիր այս գեղեցիկ օրը մեզ հետ
-            </div>
-        </section>
+        <div class="field">
+          <label for="fMsg">Մաղթանք կամ նշում (ըստ ցանկության)</label>
+          <textarea id="fMsg" name="msg" rows="3" placeholder="Գրեք ձեր մաղթանքը…"></textarea>
+        </div>
 
-        <!-- Photo Gallery -->
-        <section class="gallery-section">
-            <h2 class="section-title">Մեր Պատմությունը</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item" id="gallery-img-01">
-                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800" alt="Վարուժան և Անահիտ - 1">
-                </div>
-                <div class="gallery-item" id="gallery-img-02">
-                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800" alt="Վարուժան և Անահիտ - 2">
-                </div>
-                <div class="gallery-item" id="gallery-img-03">
-                    <img src="https://images.unsplash.com/photo-1529636798458-92182e662485?w=800" alt="Վարուժան և Անահիտ - 3">
-                </div>
-                <div class="gallery-item" id="gallery-img-04">
-                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800" alt="Վարուժան և Անահիտ - 4">
-                </div>
-            </div>
-        </section>
-
-        <!-- Schedule Section -->
-        <section class="schedule-section">
-            <h2 class="section-title">Ժամանակացույց</h2>
-            
-            <div class="timeline">
-                <div class="timeline-item fade-in-section">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-time">11:00</div>
-                        <div class="timeline-title">Փեսայի տուն</div>
-                        <div class="timeline-location">
-                            Արտաշատ քաղաք<br>
-                            Մյասնիկյան 71
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in-section">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-time">14:00</div>
-                        <div class="timeline-title">Հարսի տուն</div>
-                        <div class="timeline-location">
-                            Երևան<br>
-                            Ֆուչիկի 1 նրբանցք 5 շենք
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in-section">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-time">16:00</div>
-                        <div class="timeline-title">Եկեղեցի</div>
-                        <div class="timeline-location">
-                            Արտաշատ ք<br>
-                            Սուրբ Հովհաննես
-                        </div>
-                        <img src="https://armeniandiscovery.com/wp-content/uploads/2020/05/Saint-Hovhannes-Church-Artashat.jpg" alt="Սուրբ Հովհաննես Եկեղեցի" class="venue-image" onerror="this.src='https://images.unsplash.com/photo-1548625149-fc4a29cf7092?w=800'">
-                    </div>
-                </div>
-
-                <div class="timeline-item fade-in-section">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <div class="timeline-time">17:00</div>
-                        <div class="timeline-title">Ռեստորան Հրաշք Այգի</div>
-                        <div class="timeline-location">
-                            գյուղ Մխչյան
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800" alt="Հրաշք Այգի Ռեստորան" class="venue-image">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- RSVP Section -->
-        <section class="rsvp-section">
-            <div class="rsvp-container">
-                <h2 class="section-title">RSVP</h2>
-                <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 20px;">
-                    Խնդրում ենք հաստատել Ձեր մասնակցությունը
-                </p>
-
-                <form class="rsvp-form" id="rsvpForm" onsubmit="handleSubmit(event)">
-                    <div class="form-group">
-                        <label>Անուdelays և Ազգանուdelays</label>
-                        <input type="text" id="guestName" required placeholder="Մdelays delays delays delays delays delays">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Կdelays delays delays delays delays delays delays delays?</label>
-                        <div class="radio-group">
-                            <label class="radio-item">
-                                <input type="radio" name="attendance" value="yes" required>
-                                <span>Այdelays, կdelays</span>
-                            </label>
-                            <label class="radio-item">
-                                <input type="radio" name="attendance" value="no" required>
-                                <span>Ցdelays, չdelays delays</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Մdelays delays delays delays delays delays delays</label>
-                        <select id="guestCount">
-                            <option value="1">1 delays</option>
-                            <option value="2">2 delays</option>
-                            <option value="3">3 delays</option>
-                            <option value="4">4 delays</option>
-                            <option value="5">5+ delays</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Հdelays delays delays delays delays delays delays delays delays</label>
-                        <input type="tel" id="guestPhone" placeholder="09XXXXXXXX" required>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Հdelays delays delays delays delays delays delays delays delays</button>
-                </form>
-
-                <div class="whatsapp-info">
-                    <p style="color: var(--text-light); margin-bottom: 10px;">Կdelays delays delays delays delays delays delays delays delays</p>
-                    <a href="https://wa.me/37499915541" target="_blank">
-                        <i class="fab fa-whatsapp"></i>
-                        099 915 541
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer>
-            <div class="footer-hearts">♥ ♥ ♥</div>
-            <p>Սdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">Վdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays</p>
-        </footer>
+        <button class="btn-send" type="submit">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.5-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1.1-1.4-1.1-2.7 0-1.3.7-1.9.9-2.2.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.1.1.3 0 .5-.1.2-.2.3-.3.5l-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.6.8 1.9.9.3.2.5.2.5.4.1.1.1.7-.1 1.2z"/></svg>
+          Ուղարկել WhatsApp-ով
+        </button>
+      </form>
+      <p class="wa-note">Կամ գրեք մեզ WhatsApp-ով՝ <a href="https://wa.me/37499915541" target="_blank" rel="noopener">099 915 541</a></p>
     </div>
+  </section>
+</main>
 
-    <!-- YouTube IFrame API -->
-    <script>
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+<footer>
+  <p class="f-names">Վարուժան <span class="amp">&amp;</span> Անահիտ</p>
+  <p class="f-date">25 . 08 . 2026</p>
+  <p class="f-love">Պատրաստված է մեծ սիրով <span class="h">♥</span> Սպասում ենք Ձեզ</p>
+</footer>
 
-        var player;
-        var isPlaying = false;
+<!-- Երաժշտության կոճակ (միայն պատկերակը) -->
+<button id="musicBtn" aria-label="Միացնել / անջատել երաժշտությունը" aria-pressed="false" title="Երաժշտություն">
+  <svg class="note" viewBox="0 0 24 24"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+  <span class="eq" aria-hidden="true"><i></i><i></i><i></i></span>
+</button>
+<div id="toast" role="status"></div>
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('youtubePlayer', {
-                height: '1',
-                width: '1',
-                videoId: 'Ne-xVtVrQF0', // Calum Scott - You Are The Reason
-                playerVars: {
-                    'autoplay': 0,
-                    'controls': 0,
-                    'loop': 1,
-                    'playlist': 'Ne-xVtVrQF0'
-                },
-                events: {
-                    'onReady': onPlayerReady,
-                    'onStateChange': onPlayerStateChange
-                }
-            });
-        }
+<script>
+(function(){
+"use strict";
+var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        function onPlayerReady(event) {
-            console.log('YouTube player is ready');
-        }
+/* ---------- Ծրար ---------- */
+var intro = document.getElementById('intro'),
+    env = document.getElementById('envelope'),
+    opened = false;
+function openEnvelope(){
+  if(opened) return; opened = true;
+  intro.classList.add('opened');
+  env.classList.add('open');
+  setTimeout(function(){ intro.classList.add('fade'); }, 4300);
+  setTimeout(function(){
+    intro.style.display = 'none';
+    document.body.classList.add('ready');
+  }, 5200);
+}
+env.addEventListener('click', openEnvelope);
+env.addEventListener('keydown', function(e){
+  if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openEnvelope(); }
+});
 
-        function onPlayerStateChange(event) {
-            if (event.data === YT.PlayerState.PLAYING) {
-                isPlaying = true;
-                document.getElementById('musicControl').classList.add('playing');
-            } else if (event.data === YT.PlayerState.PAUSED) {
-                isPlaying = false;
-                document.getElementById('musicControl').classList.remove('playing');
-            }
-        }
+/* ---------- Հետհաշվարկ մինչև 25.08.2026 ---------- */
+var TARGET = new Date('2026-08-25T11:00:00+04:00').getTime();
+var elD=document.getElementById('cdD'), elH=document.getElementById('cdH'),
+    elM=document.getElementById('cdM'), elS=document.getElementById('cdS');
+function pad(n){ return (n<10?'0':'')+n; }
+function setNum(el,v){
+  if(el.textContent !== v){
+    el.textContent = v;
+    if(!reduced){ el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); }
+  }
+}
+function tickCd(){
+  var diff = TARGET - Date.now();
+  if(diff <= 0){
+    setNum(elD,'0'); setNum(elH,'00'); setNum(elM,'00'); setNum(elS,'00');
+    document.querySelector('.cd-sub').textContent = 'Այսօր մեր հարսանիքն է 🎉';
+    return;
+  }
+  setNum(elD, String(Math.floor(diff/86400000)));
+  setNum(elH, pad(Math.floor(diff/3600000)%24));
+  setNum(elM, pad(Math.floor(diff/60000)%60));
+  setNum(elS, pad(Math.floor(diff/1000)%60));
+}
+tickCd(); setInterval(tickCd, 1000);
 
-        // Create falling feathers
-        function createFeathers() {
-            const container = document.getElementById('feathersContainer');
-            const featherCount = 15;
+/* ---------- Scroll reveal ---------- */
+var io = new IntersectionObserver(function(entries){
+  entries.forEach(function(en){
+    if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
+  });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
-            for (let i = 0; i < featherCount; i++) {
-                const feather = document.createElement('div');
-                feather.className = 'feather';
-                feather.style.left = Math.random() * 100 + '%';
-                feather.style.animationDuration = (Math.random() * 10 + 10) + 's';
-                feather.style.animationDelay = Math.random() * 10 + 's';
-                feather.style.opacity = Math.random() * 0.5 + 0.3;
-                container.appendChild(feather);
-            }
-        }
+/* ---------- Ընկնող թերթիկներ ---------- */
+var cv = document.getElementById('petals'), ctx = cv.getContext('2d'), P = [];
+function sizeCv(){ cv.width = innerWidth; cv.height = innerHeight; }
+sizeCv(); addEventListener('resize', sizeCv);
+var COLORS = ['rgba(217,139,139,.55)','rgba(201,111,111,.45)','rgba(198,161,91,.4)','rgba(240,217,211,.7)'];
+function newP(init){
+  return { x: Math.random()*cv.width, y: init ? Math.random()*cv.height : -20,
+    r: 5 + Math.random()*7, a: Math.random()*Math.PI*2, va: (Math.random()-.5)*.02,
+    vx: (Math.random()-.5)*.6, vy: .6 + Math.random()*1.1,
+    c: COLORS[Math.random()*COLORS.length|0], heart: Math.random() < .18 };
+}
+if(!reduced){
+  for(var i=0;i<36;i++) P.push(newP(true));
+  (function loop(){
+    ctx.clearRect(0,0,cv.width,cv.height);
+    P.forEach(function(p,idx){
+      p.x += p.vx + Math.sin(p.a)*.4; p.y += p.vy; p.a += p.va;
+      if(p.y > cv.height + 24) P[idx] = newP(false);
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle = p.c;
+      if(p.heart){
+        ctx.beginPath();
+        ctx.moveTo(0,p.r*.4);
+        ctx.bezierCurveTo(p.r,-p.r*.6,p.r*.6,-p.r*1.4,0,-p.r*.5);
+        ctx.bezierCurveTo(-p.r*.6,-p.r*1.4,-p.r,-p.r*.6,0,p.r*.4);
+        ctx.fill();
+      }else{
+        ctx.beginPath(); ctx.ellipse(0,0,p.r*.6,p.r,0,0,Math.PI*2); ctx.fill();
+      }
+      ctx.restore();
+    });
+    requestAnimationFrame(loop);
+  })();
+}
 
-        // Open envelope
-        function openEnvelope() {
-            const envelope = document.getElementById('envelope');
-            const envelopeContainer = document.getElementById('envelopeContainer');
-            const mainContent = document.getElementById('mainContent');
+/* ---------- Երաժշտություն (միայն կոճակ, առանց անվան) ---------- */
+var YT_ID = 'ShZ978fBl6Y'; /* Calum Scott — You Are the Reason */
+var player = null, playing = false, loading = false;
+var btn = document.getElementById('musicBtn');
+function createPlayer(){
+  var holder = document.createElement('div');
+  holder.id = 'yt-holder'; document.body.appendChild(holder);
+  player = new YT.Player('yt-holder', {
+    videoId: YT_ID,
+    playerVars:{ controls:0, rel:0, playsinline:1, loop:1, playlist:YT_ID },
+    events:{ onReady:function(){ player.setVolume(65); setMusic(true); } }
+  });
+}
+function loadYT(){
+  if(loading) return; loading = true;
+  if(window.YT && window.YT.Player){ createPlayer(); return; }
+  window.onYouTubeIframeAPIReady = createPlayer;
+  var t = document.createElement('script');
+  t.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(t);
+}
+function setMusic(on){
+  playing = on;
+  btn.classList.toggle('playing', on);
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+btn.addEventListener('click', function(){
+  if(!player){ loadYT(); return; }
+  if(playing){ player.pauseVideo(); setMusic(false); }
+  else { player.playVideo(); setMusic(true); }
+});
 
-            envelope.classList.add('open');
-            
-            // Play music immediately when envelope is clicked
-            if (player && player.playVideo) {
-                player.setVolume(50);
-                player.playVideo();
-            }
-            
-            setTimeout(() => {
-                envelopeContainer.classList.add('hidden');
-                mainContent.classList.add('visible');
-                mainContent.style.display = 'block';
-                
-                setTimeout(() => {
-                    document.querySelectorAll('.gallery-item').forEach(item => {
-                        item.classList.add('visible');
-                    });
-                }, 500);
-            }, 2500);
-        }
-
-        // Toggle music
-        function toggleMusic() {
-            if (!player) return;
-
-            if (isPlaying) {
-                player.pauseVideo();
-            } else {
-                player.playVideo();
-            }
-        }
-
-        // Countdown
-        function updateCountdown() {
-            const weddingDate = new Date('2026-08-25T00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
-        }
-
-        // Scroll animations
-        function handleScrollAnimations() {
-            const sections = document.querySelectorAll('.fade-in-section');
-            
-            sections.forEach(section => {
-                const sectionTop = section.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (sectionTop < windowHeight - 100) {
-                    section.classList.add('visible');
-                }
-            });
-
-            // Gallery items animation
-            const galleryItems = document.querySelectorAll('.gallery-item');
-            galleryItems.forEach(item => {
-                const itemTop = item.getBoundingClientRect().top;
-                if (itemTop < windowHeight - 100) {
-                    item.classList.add('visible');
-                }
-            });
-        }
-
-        // Form submission
-        function handleSubmit(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('guestName').value;
-            const attendance = e.target.querySelector('input[name="attendance"]:checked').value;
-            const guestCount = document.getElementById('guestCount').value;
-            const phone = document.getElementById('guestPhone').value;
-            
-            let message = `*Հdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays*\n\n`;
-            message += `Անdelays: ${name}\n`;
-            message += `Մdelays delays delays delays delays delays delays delays delays: ${attendance === 'yes' ? 'Այdelays' : 'Ոdelays'}\n`;
-            message += `Հdelays delays delays delays delays delays delays delays delays delays delays delays delays: ${guestCount}\n`;
-            message += `Հdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays: ${phone}`;
-            
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/37499915541?text=${encodedMessage}`, '_blank');
-            
-            alert('Շdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays......');
-            e.target.reset();
-        }
-
-        // Initialize
-        window.onload = function() {
-            createFeathers();
-            updateCountdown();
-            setInterval(updateCountdown, 1000);
-        };
-
-        window.onscroll = function() {
-            handleScrollAnimations();
-        };
-
-        // Prevent envelope click after opening
-        document.getElementById('envelope').addEventListener('click', function(e) {
-            if (this.classList.contains('open')) {
-                e.stopPropagation();
-            }
-        });
-    </script>
+/* ---------- RSVP → WhatsApp ---------- */
+var WA = '37499915541'; /* 099 915 541 */
+var toast = document.getElementById('toast'), toastT;
+function showToast(msg){
+  toast.textContent = msg; toast.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(function(){ toast.classList.remove('show'); }, 3500);
+}
+document.getElementById('rsvpForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  var name = document.getElementById('fName').value.trim();
+  if(!name){ showToast('Խնդրում ենք լրացնել Ձեր անունը 🙏'); document.getElementById('fName').focus(); return; }
+  var attend = document.querySelector('input[name="attend"]:checked').value;
+  var guests = document.getElementById('fGuests').value;
+  var msg = document.getElementById('fMsg').value.trim();
+  var text = 'Բարև ձեզ 💌 Ես ' + name + ' եմ։\n' +
+             (attend === 'yes'
+                ? '✅ Ուրախությամբ կմասնակցեմ Ձեր հարսանիքին։'
+                : '❌ Ցավոք, չեմ կարողանա մասնակցել։') + '\n' +
+             '👥 Հյուրերի քանակը՝ ' + guests +
+             (msg ? '\n💬 ' + msg : '') + '\n' +
+             'Վարուժան և Անահիտ, 25.08.2026 ♥';
+  window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(text), '_blank');
+  showToast('Շնորհակալություն, ' + name + ' ♥ Պատասխանը կբացվի WhatsApp-ում');
+});
+})();
+</script>
 </body>
 </html>
