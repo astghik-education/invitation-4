@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Նկարների պատկերասրահ</title>
+    <title>արուժան և Անահիտ - Հարսանիքի Հրավեր</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -11,209 +13,1027 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --cream-bg: #FFFBF5;
+            --cream-light: #FFF8F0;
+            --gold: #D4AF37;
+            --gold-light: #F4E8C1;
+            --text-dark: #4A4A4A;
+            --text-light: #7A7A7A;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Cormorant Garamond', serif;
+            background: linear-gradient(135deg, var(--cream-bg) 0%, var(--cream-light) 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
             min-height: 100vh;
+        }
+
+        /* Falling Feathers */
+        .feathers-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .feather {
+            position: absolute;
+            top: -50px;
+            width: 30px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 100%);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            animation: fall linear infinite;
+            opacity: 0.6;
+            box-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+
+        .feather::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: rgba(255,255,255,0.6);
+            transform: translateY(-50%);
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0px);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Envelope Section */
+        .envelope-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--cream-bg);
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            z-index: 1000;
+            transition: opacity 1s ease, visibility 1s ease;
         }
 
-        .gallery-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 30px;
-            max-width: 900px;
-            width: 100%;
+        .envelope-container.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 25px;
-            font-size: 28px;
-        }
-
-        .slider {
+        .envelope {
             position: relative;
-            width: 100%;
-            overflow: hidden;
-            border-radius: 10px;
-            background: #f0f0f0;
-        }
-
-        .slides {
-            display: flex;
-            transition: transform 0.5s ease-in-out;
-        }
-
-        .slide {
-            min-width: 100%;
-            position: relative;
-        }
-
-        .slide img {
-            width: 100%;
-            height: auto;
-            display: block;
-            max-height: 500px;
-            object-fit: contain;
-            background: #f0f0f0;
-        }
-
-        .slide-label {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .nav-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.9);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            font-size: 24px;
+            width: 400px;
+            height: 300px;
             cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+            border: 2px solid var(--gold-light);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #fff 0%, #fafafa 100%);
+            border: 2px solid var(--gold-light);
+            border-bottom: none;
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            transform-origin: top;
+            transition: transform 1s ease;
             z-index: 10;
         }
 
-        .nav-btn:hover {
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-content {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 80%;
             background: white;
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .prev-btn {
-            left: 15px;
-        }
-
-        .next-btn {
-            right: 15px;
-        }
-
-        .dots {
+            border-radius: 5px;
             display: flex;
             justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
+            align-items: center;
+            opacity: 0;
+            transition: all 1s ease 0.5s;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
+        .envelope.open .envelope-content {
+            opacity: 1;
+            bottom: 100px;
+            animation: riseUp 2s ease forwards;
+        }
+
+        @keyframes riseUp {
+            0% {
+                transform: translateX(-50%) translateY(0) scale(0.8);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-50px) scale(1);
+            }
+            100% {
+                transform: translateX(-50%) translateY(-80px) scale(1);
+            }
+        }
+
+        .rings {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+
+        .ring {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border: 8px solid var(--gold);
             border-radius: 50%;
-            background: #ccc;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .ring:first-child {
+            left: 20px;
+            top: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .ring:last-child {
+            right: 20px;
+            top: 30px;
+            animation: float 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--text-light);
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+            font-family: 'Playfair Display', serif;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transition: opacity 2s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+        }
+
+        /* Music Button */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            transition: all 0.3s;
+            z-index: 100;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.4);
+            transition: transform 0.3s ease;
+            border: none;
         }
 
-        .dot.active {
-            background: #667eea;
-            transform: scale(1.3);
+        .music-control:hover {
+            transform: scale(1.1);
         }
 
-        .counter {
+        .music-control.playing {
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .music-control i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Header Section */
+        .header-section {
             text-align: center;
+            padding: 80px 20px 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .couple-names {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            animation: fadeInDown 2s ease;
+        }
+
+        .ampersand {
+            color: var(--gold);
+            font-style: italic;
+            font-size: 2.5rem;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .invitation-text {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: var(--text-light);
+            margin: 40px 0;
+            font-style: italic;
+            animation: fadeIn 2s ease 0.5s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Date Section */
+        .date-section {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            margin: 40px auto;
+            max-width: 600px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            position: relative;
+            animation: fadeIn 2s ease 1s both;
+        }
+
+        .heart-dotted {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            position: relative;
+            border: 3px dotted var(--gold);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+
+        .heart-dotted::before {
+            content: '♥';
+            font-size: 40px;
+            color: var(--gold);
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .wedding-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            background: var(--cream-light);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 80px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .countdown-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .share-text {
+            margin-top: 30px;
+            font-size: 1.4rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Schedule Section */
+        .schedule-section {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--text-dark);
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--gold);
+        }
+
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gold-light), var(--gold));
+        }
+
+        .timeline-item {
+            margin-bottom: 50px;
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            border-radius: 50%;
+            border: 4px solid var(--cream-bg);
+            top: 30px;
+            z-index: 10;
+        }
+
+        .timeline-time {
+            font-size: 1.5rem;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .timeline-location {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .venue-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
             margin-top: 15px;
-            color: #555;
-            font-size: 16px;
-            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* RSVP Section */
+        .rsvp-section {
+            background: white;
+            padding: 80px 20px;
+            margin-top: 60px;
+        }
+
+        .rsvp-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .rsvp-form {
+            background: var(--cream-light);
+            padding: 40px;
+            border-radius: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--gold-light);
+            border-radius: 10px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            transition: border-color 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .radio-item input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .submit-btn {
+            background: var(--gold);
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Playfair Display', serif;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .whatsapp-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px dashed var(--gold-light);
+        }
+
+        .whatsapp-info a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .whatsapp-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .footer-hearts {
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .couple-names {
+                font-size: 2.5rem;
+            }
+
+            .envelope {
+                width: 300px;
+                height: 225px;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                justify-content: flex-start;
+                padding-left: 50px;
+            }
+
+            .timeline-dot {
+                left: 20px;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+                padding: 15px 10px;
+            }
+
+            .countdown-number {
+                font-size: 2rem;
+            }
+        }
+
+        /* Scroll animations */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .fade-in-section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <div class="gallery-container">
-        <h1>🖼️ Նկարների պատկերասրահ</h1>
-        
-        <div class="slider">
-            <div class="slides" id="slides">
-                <div class="slide">
-                    <img src="img-01.jpg" alt="Նկար 1" onerror="this.src='https://via.placeholder.com/800x500/667eea/ffffff?text=img-01'">
-                    <div class="slide-label">img-01</div>
-                </div>
-                <div class="slide">
-                    <img src="img-02.jpg" alt="Նկար 2" onerror="this.src='https://via.placeholder.com/800x500/764ba2/ffffff?text=img-02'">
-                    <div class="slide-label">img-02</div>
-                </div>
-                <div class="slide">
-                    <img src="img-03.jpg" alt="Նկար 3" onerror="this.src='https://via.placeholder.com/800x500/f093fb/ffffff?text=img-03'">
-                    <div class="slide-label">img-03</div>
-                </div>
-                <div class="slide">
-                    <img src="img-04.jpg" alt="Նկար 4" onerror="this.src='https://via.placeholder.com/800x500/4facfe/ffffff?text=img-04'">
-                    <div class="slide-label">img-04</div>
+
+    <!-- Audio Element -->
+    <audio id="weddingMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <!-- Replace with actual Calum Scott - You are the reason URL -->
+    </audio>
+
+    <!-- Falling Feathers -->
+    <div class="feathers-container" id="feathersContainer"></div>
+
+    <!-- Envelope Section -->
+    <div class="envelope-container" id="envelopeContainer">
+        <div class="envelope" id="envelope" onclick="openEnvelope()">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="envelope-content">
+                <div class="rings">
+                    <div class="ring"></div>
+                    <div class="ring"></div>
                 </div>
             </div>
+            <div class="click-hint">Սեղմեք բացելու համար</div>
+        </div>
+    </div>
+
+    <!-- Music Control -->
+    <button class="music-control" id="musicControl" onclick="toggleMusic()">
+        <i class="fas fa-music" id="musicIcon"></i>
+    </button>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        
+        <!-- Header -->
+        <section class="header-section">
+            <h1 class="couple-names">
+                արուժան <span class="ampersand">&</span> Անահիտ
+            </h1>
             
-            <button class="nav-btn prev-btn" onclick="changeSlide(-1)">❮</button>
-            <button class="nav-btn next-btn" onclick="changeSlide(1)">❯</button>
-        </div>
+            <div class="invitation-text">
+                Սիրելի բարեկամներ և ընկերներ<br>
+                եծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։<br>
+                Ձեր ներկայությունը կդարձնի մեր երջանկությունը իարժեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։
+            </div>
+        </section>
 
-        <div class="dots" id="dots">
-            <span class="dot active" onclick="goToSlide(0)"></span>
-            <span class="dot" onclick="goToSlide(1)"></span>
-            <span class="dot" onclick="goToSlide(2)"></span>
-            <span class="dot" onclick="goToSlide(3)"></span>
-        </div>
+        <!-- Date Section -->
+        <section class="date-section fade-in-section">
+            <div class="heart-dotted"></div>
+            <div class="wedding-date">25.08.2026</div>
+            
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">00</span>
+                    <span class="countdown-label">Օր</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">00</span>
+                    <span class="countdown-label">Ժամ</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">00</span>
+                    <span class="countdown-label">Րոպե</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">00</span>
+                    <span class="countdown-label">Վայրկյան</span>
+                </div>
+            </div>
 
-        <div class="counter" id="counter">1 / 4</div>
+            <div class="share-text">
+                Կիսիր այս գեղեցիկ օրը մեզ հետ
+            </div>
+        </section>
+
+        <!-- Schedule Section -->
+        <section class="schedule-section">
+            <h2 class="section-title">Ժամանակացույց</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item fade-in-section">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">11:00</div>
+                        <div class="timeline-title">Փեսայի տուն</div>
+                        <div class="timeline-location">
+                            Արտաշատ քաղաք<br>
+                            Մյասնիկյան 71
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in-section">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">14:00</div>
+                        <div class="timeline-title">Հարսի տուն</div>
+                        <div class="timeline-location">
+                            Երևան<br>
+                            ուչիկի 1 նրբանցք 5 շենք
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in-section">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">16:00</div>
+                        <div class="timeline-title">Եկեղեցի</div>
+                        <div class="timeline-location">
+                            Արտաշատ ք<br>
+                            Սուրբ Հովհաննես
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1548625149-fc4a29cf7092?w=800" alt="Church" class="venue-image">
+                    </div>
+                </div>
+
+                <div class="timeline-item fade-in-section">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-time">17:00</div>
+                        <div class="timeline-title">Ռեստորան Հրաշք Այգի</div>
+                        <div class="timeline-location">
+                            գյուղ Մխչյան
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800" alt="Restaurant" class="venue-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- RSVP Section -->
+        <section class="rsvp-section">
+            <div class="rsvp-container">
+                <h2 class="section-title">RSVP</h2>
+                <p style="font-size: 1.2rem; color: var(--text-light); margin-bottom: 20px;">
+                    Խնդրում ենք հաստատել Ձեր մասնակցությունը
+                </p>
+
+                <form class="rsvp-form" id="rsvpForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label>Անուն և Ազգանուն</label>
+                        <input type="text" required placeholder="Մուտքագրեք Ձեր անունը">
+                    </div>
+
+                    <div class="form-group">
+                        <label>մասնակցե՞ք</label>
+                        <div class="radio-group">
+                            <label class="radio-item">
+                                <input type="radio" name="attendance" value="yes" required>
+                                <span>Այո, կգամ</span>
+                            </label>
+                            <label class="radio-item">
+                                <input type="radio" name="attendance" value="no" required>
+                                <span>ավոք, չեմ կարող</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Մարդկանց քանակ</label>
+                        <select id="guestCount">
+                            <option value="1">1 հոգի</option>
+                            <option value="2">2 հոգի</option>
+                            <option value="3">3 հոգի</option>
+                            <option value="4">4 հոգի</option>
+                            <option value="5">5+ հոգի</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Հեռախոսահամար</label>
+                        <input type="tel" placeholder="09XXXXXXXX" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Հաստատել</button>
+                </form>
+
+                <div class="whatsapp-info">
+                    <p style="color: var(--text-light); margin-bottom: 10px;">ամ գրեք WhatsApp-ով</p>
+                    <a href="https://wa.me/37499915541" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        099 915 541
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-hearts">♥ ♥ ♥</div>
+            <p>Սպասում ենք Ձեզ մեր երջանիկ օրը կիսելու</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Վարուան և Անահիտ</p>
+        </footer>
     </div>
 
     <script>
-        let currentSlide = 0;
-        const totalSlides = 4;
-        const slides = document.getElementById('slides');
-        const dots = document.querySelectorAll('.dot');
-        const counter = document.getElementById('counter');
+        // Create falling feathers
+        function createFeathers() {
+            const container = document.getElementById('feathersContainer');
+            const featherCount = 15;
 
-        function updateSlider() {
-            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentSlide);
-            });
-            
-            counter.textContent = `${currentSlide + 1} / ${totalSlides}`;
-        }
-
-        function changeSlide(direction) {
-            currentSlide += direction;
-            if (currentSlide < 0) {
-                currentSlide = totalSlides - 1;
-            } else if (currentSlide >= totalSlides) {
-                currentSlide = 0;
+            for (let i = 0; i < featherCount; i++) {
+                const feather = document.createElement('div');
+                feather.className = 'feather';
+                feather.style.left = Math.random() * 100 + '%';
+                feather.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                feather.style.animationDelay = Math.random() * 10 + 's';
+                feather.style.opacity = Math.random() * 0.5 + 0.3;
+                container.appendChild(feather);
             }
-            updateSlider();
         }
 
-        function goToSlide(index) {
-            currentSlide = index;
-            updateSlider();
+        // Open envelope
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const envelopeContainer = document.getElementById('envelopeContainer');
+            const mainContent = document.getElementById('mainContent');
+            const music = document.getElementById('weddingMusic');
+
+            envelope.classList.add('open');
+            
+            setTimeout(() => {
+                envelopeContainer.classList.add('hidden');
+                mainContent.classList.add('visible');
+                
+                // Play music
+                music.volume = 0.5;
+                music.play().catch(e => console.log('Audio play failed:', e));
+                document.getElementById('musicControl').classList.add('playing');
+            }, 1500);
         }
 
-        // Ավտոմատ փոխանցում 5 վայրկյանը մեկ
-        setInterval(() => {
-            changeSlide(1);
-        }, 5000);
+        // Toggle music
+        function toggleMusic() {
+            const music = document.getElementById('weddingMusic');
+            const control = document.getElementById('musicControl');
+            const icon = document.getElementById('musicIcon');
 
-        // Ստեղնաշարի կառավարում
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') changeSlide(-1);
-            if (e.key === 'ArrowRight') changeSlide(1);
+            if (music.paused) {
+                music.play();
+                control.classList.add('playing');
+                icon.classList.remove('fa-volume-mute');
+                icon.classList.add('fa-music');
+            } else {
+                music.pause();
+                control.classList.remove('playing');
+                icon.classList.remove('fa-music');
+                icon.classList.add('fa-volume-mute');
+            }
+        }
+
+        // Countdown
+        function updateCountdown() {
+            const weddingDate = new Date('2026-08-25T00:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Scroll animations
+        function handleScrollAnimations() {
+            const sections = document.querySelectorAll('.fade-in-section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (sectionTop < windowHeight - 100) {
+                    section.classList.add('visible');
+                }
+            });
+        }
+
+        // Form submission
+        function handleSubmit(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const attendance = formData.get('attendance');
+            const guestCount = document.getElementById('guestCount').value;
+            
+            let message = `*Հարսանիքի հաստատում*\n\n`;
+            message += `Անուն: ${e.target.querySelector('input[type="text"]').value}\n`;
+            message += `ասնակցություն: ${attendance === 'yes' ? 'Այո' : 'չ'}\n`;
+            message += `Հյուրերի քանակ: ${guestCount}\n`;
+            message += `Հեռախոս: ${e.target.querySelector('input[type="tel"]').value}`;
+            
+            const encodedMessage = encodeURIComponent(message);
+            window.open(`https://wa.me/37499915541?text=${encodedMessage}`, '_blank');
+            
+            alert('Շնորհակալություն! Ձեր պատասխանը ուղարկվել է WhatsApp-ով։');
+            e.target.reset();
+        }
+
+        // Initialize
+        window.onload = function() {
+            createFeathers();
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+            handleScrollAnimations();
+        };
+
+        window.onscroll = function() {
+            handleScrollAnimations();
+        };
+
+        // Prevent envelope click after opening
+        document.getElementById('envelope').addEventListener('click', function(e) {
+            if (this.classList.contains('open')) {
+                e.stopPropagation();
+            }
         });
     </script>
 </body>
