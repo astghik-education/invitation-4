@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="hy">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>արուժան և Անահիտ - Հարսանիքի Հրավեր</title>
+    <title>Վարուժան և Անահիտ - Հարսանիքի Հրավեր</title>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -14,20 +15,31 @@
         }
 
         :root {
-            --cream-bg: #FFFBF5;
-            --cream-light: #FFF8F0;
+            --bg-color: #efefef;
             --gold: #D4AF37;
             --gold-light: #F4E8C1;
             --text-dark: #4A4A4A;
             --text-light: #7A7A7A;
+            --white: #ffffff;
         }
 
         body {
             font-family: 'Cormorant Garamond', serif;
-            background: linear-gradient(135deg, var(--cream-bg) 0%, var(--cream-light) 100%);
+            background-color: var(--bg-color);
             color: var(--text-dark);
             overflow-x: hidden;
             min-height: 100vh;
+        }
+
+        /* YouTube Player Hidden */
+        #youtubePlayer {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Falling Feathers */
@@ -89,7 +101,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            background: var(--cream-bg);
+            background: var(--bg-color);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -102,9 +114,15 @@
             visibility: hidden;
         }
 
+        .envelope-wrapper {
+            position: relative;
+            width: 500px;
+            height: 400px;
+        }
+
         .envelope {
             position: relative;
-            width: 400px;
+            width: 100%;
             height: 300px;
             cursor: pointer;
             transition: transform 0.3s ease;
@@ -145,46 +163,61 @@
             z-index: 1;
         }
 
-        .envelope-content {
+        /* Photo emerging from envelope */
+        .emerging-photo {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            height: 80%;
+            height: 85%;
             background: white;
             border-radius: 5px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
             opacity: 0;
-            transition: all 1s ease 0.5s;
             z-index: 5;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 1.5s ease 0.5s;
         }
 
-        .envelope.open .envelope-content {
+        .envelope.open .emerging-photo {
             opacity: 1;
-            bottom: 100px;
-            animation: riseUp 2s ease forwards;
+            animation: emergeFromEnvelope 2.5s ease forwards;
         }
 
-        @keyframes riseUp {
+        @keyframes emergeFromEnvelope {
             0% {
                 transform: translateX(-50%) translateY(0) scale(0.8);
+                bottom: 20px;
             }
-            50% {
-                transform: translateX(-50%) translateY(-50px) scale(1);
+            40% {
+                transform: translateX(-50%) translateY(-100px) scale(1);
+                bottom: 100px;
             }
             100% {
-                transform: translateX(-50%) translateY(-80px) scale(1);
+                transform: translateX(-50%) translateY(-150px) scale(1.2);
+                bottom: 200px;
             }
         }
 
-        .rings {
-            position: relative;
-            width: 150px;
-            height: 150px;
+        .emerging-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .rings-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .envelope.open .rings-overlay {
+            opacity: 0;
         }
 
         .ring {
@@ -197,14 +230,14 @@
         }
 
         .ring:first-child {
-            left: 20px;
-            top: 30px;
+            left: -60px;
+            top: 20px;
             animation: float 3s ease-in-out infinite;
         }
 
         .ring:last-child {
-            right: 20px;
-            top: 30px;
+            right: -60px;
+            top: 20px;
             animation: float 3s ease-in-out infinite 1.5s;
         }
 
@@ -215,13 +248,14 @@
 
         .click-hint {
             position: absolute;
-            bottom: -60px;
+            bottom: -80px;
             left: 50%;
             transform: translateX(-50%);
             color: var(--text-light);
             font-size: 1.2rem;
             animation: pulse 2s infinite;
             font-family: 'Playfair Display', serif;
+            white-space: nowrap;
         }
 
         @keyframes pulse {
@@ -235,10 +269,12 @@
             transition: opacity 2s ease;
             position: relative;
             z-index: 10;
+            display: none;
         }
 
         .main-content.visible {
             opacity: 1;
+            display: block;
         }
 
         /* Music Button */
@@ -281,7 +317,7 @@
         /* Header Section */
         .header-section {
             text-align: center;
-            padding: 80px 20px 40px;
+            padding: 60px 20px 40px;
             max-width: 800px;
             margin: 0 auto;
         }
@@ -381,7 +417,7 @@
         }
 
         .countdown-item {
-            background: var(--cream-light);
+            background: var(--bg-color);
             padding: 20px;
             border-radius: 10px;
             min-width: 80px;
@@ -410,6 +446,52 @@
             color: var(--text-light);
             font-style: italic;
         }
+
+        /* Photo Gallery */
+        .gallery-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.8s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-item:nth-child(1) { transition-delay: 0.1s; }
+        .gallery-item:nth-child(2) { transition-delay: 0.2s; }
+        .gallery-item:nth-child(3) { transition-delay: 0.3s; }
+        .gallery-item:nth-child(4) { transition-delay: 0.4s; }
 
         /* Schedule Section */
         .schedule-section {
@@ -497,7 +579,7 @@
             height: 20px;
             background: var(--gold);
             border-radius: 50%;
-            border: 4px solid var(--cream-bg);
+            border: 4px solid var(--bg-color);
             top: 30px;
             z-index: 10;
         }
@@ -525,7 +607,7 @@
 
         .venue-image {
             width: 100%;
-            height: 200px;
+            height: 250px;
             object-fit: cover;
             border-radius: 10px;
             margin-top: 15px;
@@ -546,7 +628,7 @@
         }
 
         .rsvp-form {
-            background: var(--cream-light);
+            background: var(--bg-color);
             padding: 40px;
             border-radius: 20px;
             margin-top: 30px;
@@ -624,7 +706,7 @@
         .whatsapp-info {
             margin-top: 30px;
             padding: 20px;
-            background: white;
+            background: var(--bg-color);
             border-radius: 10px;
             border: 2px dashed var(--gold-light);
         }
@@ -665,9 +747,17 @@
                 font-size: 2.5rem;
             }
 
-            .envelope {
-                width: 300px;
-                height: 225px;
+            .envelope-wrapper {
+                width: 350px;
+                height: 300px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-item img {
+                height: 300px;
             }
 
             .timeline::before {
@@ -714,22 +804,26 @@
 </head>
 <body>
 
-    <!-- Audio Element -->
-    <audio id="weddingMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        <!-- Replace with actual Calum Scott - You are the reason URL -->
-    </audio>
+    <!-- YouTube Player (Hidden) -->
+    <div id="youtubePlayer"></div>
 
     <!-- Falling Feathers -->
     <div class="feathers-container" id="feathersContainer"></div>
 
     <!-- Envelope Section -->
     <div class="envelope-container" id="envelopeContainer">
-        <div class="envelope" id="envelope" onclick="openEnvelope()">
-            <div class="envelope-flap"></div>
-            <div class="envelope-body"></div>
-            <div class="envelope-content">
-                <div class="rings">
+        <div class="envelope-wrapper">
+            <div class="envelope" id="envelope" onclick="openEnvelope()">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+                
+                <!-- Emerging Photo (img-01) -->
+                <div class="emerging-photo">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800" alt="Վարուժան և Անահիտ" id="img-01">
+                </div>
+
+                <!-- Rings Overlay (visible before opening) -->
+                <div class="rings-overlay">
                     <div class="ring"></div>
                     <div class="ring"></div>
                 </div>
@@ -749,13 +843,13 @@
         <!-- Header -->
         <section class="header-section">
             <h1 class="couple-names">
-                արուժան <span class="ampersand">&</span> Անահիտ
+                Վարուժան <span class="ampersand">&</span> Անահիտ
             </h1>
             
             <div class="invitation-text">
                 Սիրելի բարեկամներ և ընկերներ<br>
-                եծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։<br>
-                Ձեր ներկայությունը կդարձնի մեր երջանկությունը իարժեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։
+                Մեծ սիրով հրավիրում ենք Ձեզ կիսելու մեր կյանքի ամենահիշարժան և ամենասպասված օրը։<br>
+                Ձեր ներկայությունը կդարձնի մեր երջանկությունը լիարժեք և մեր օրը՝ առավել ջերմ ու անմոռանալի։
             </div>
         </section>
 
@@ -788,6 +882,25 @@
             </div>
         </section>
 
+        <!-- Photo Gallery -->
+        <section class="gallery-section">
+            <h2 class="section-title">Մեր Պատմությունը</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" id="gallery-img-01">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=800" alt="Վարուժան և Անահիտ - 1">
+                </div>
+                <div class="gallery-item" id="gallery-img-02">
+                    <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800" alt="Վարուժան և Անահիտ - 2">
+                </div>
+                <div class="gallery-item" id="gallery-img-03">
+                    <img src="https://images.unsplash.com/photo-1529636798458-92182e662485?w=800" alt="Վարուժան և Անահիտ - 3">
+                </div>
+                <div class="gallery-item" id="gallery-img-04">
+                    <img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?w=800" alt="Վարուժան և Անահիտ - 4">
+                </div>
+            </div>
+        </section>
+
         <!-- Schedule Section -->
         <section class="schedule-section">
             <h2 class="section-title">Ժամանակացույց</h2>
@@ -812,7 +925,7 @@
                         <div class="timeline-title">Հարսի տուն</div>
                         <div class="timeline-location">
                             Երևան<br>
-                            ուչիկի 1 նրբանցք 5 շենք
+                            Ֆուչիկի 1 նրբանցք 5 շենք
                         </div>
                     </div>
                 </div>
@@ -826,7 +939,7 @@
                             Արտաշատ ք<br>
                             Սուրբ Հովհաննես
                         </div>
-                        <img src="https://images.unsplash.com/photo-1548625149-fc4a29cf7092?w=800" alt="Church" class="venue-image">
+                        <img src="https://armeniandiscovery.com/wp-content/uploads/2020/05/Saint-Hovhannes-Church-Artashat.jpg" alt="Սուրբ Հովհաննես Եկեղեցի" class="venue-image" onerror="this.src='https://images.unsplash.com/photo-1548625149-fc4a29cf7092?w=800'">
                     </div>
                 </div>
 
@@ -838,7 +951,7 @@
                         <div class="timeline-location">
                             գյուղ Մխչյան
                         </div>
-                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800" alt="Restaurant" class="venue-image">
+                        <img src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800" alt="Հրաշք Այգի Ռեստորան" class="venue-image">
                     </div>
                 </div>
             </div>
@@ -854,45 +967,45 @@
 
                 <form class="rsvp-form" id="rsvpForm" onsubmit="handleSubmit(event)">
                     <div class="form-group">
-                        <label>Անուն և Ազգանուն</label>
-                        <input type="text" required placeholder="Մուտքագրեք Ձեր անունը">
+                        <label>Անուdelays և Ազգանուdelays</label>
+                        <input type="text" id="guestName" required placeholder="Մdelays delays delays delays delays delays">
                     </div>
 
                     <div class="form-group">
-                        <label>մասնակցե՞ք</label>
+                        <label>Կdelays delays delays delays delays delays delays delays?</label>
                         <div class="radio-group">
                             <label class="radio-item">
                                 <input type="radio" name="attendance" value="yes" required>
-                                <span>Այո, կգամ</span>
+                                <span>Այdelays, կdelays</span>
                             </label>
                             <label class="radio-item">
                                 <input type="radio" name="attendance" value="no" required>
-                                <span>ավոք, չեմ կարող</span>
+                                <span>Ցdelays, չdelays delays</span>
                             </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Մարդկանց քանակ</label>
+                        <label>Մdelays delays delays delays delays delays delays</label>
                         <select id="guestCount">
-                            <option value="1">1 հոգի</option>
-                            <option value="2">2 հոգի</option>
-                            <option value="3">3 հոգի</option>
-                            <option value="4">4 հոգի</option>
-                            <option value="5">5+ հոգի</option>
+                            <option value="1">1 delays</option>
+                            <option value="2">2 delays</option>
+                            <option value="3">3 delays</option>
+                            <option value="4">4 delays</option>
+                            <option value="5">5+ delays</option>
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Հեռախոսահամար</label>
-                        <input type="tel" placeholder="09XXXXXXXX" required>
+                        <label>Հdelays delays delays delays delays delays delays delays delays</label>
+                        <input type="tel" id="guestPhone" placeholder="09XXXXXXXX" required>
                     </div>
 
-                    <button type="submit" class="submit-btn">Հաստատել</button>
+                    <button type="submit" class="submit-btn">Հdelays delays delays delays delays delays delays delays delays</button>
                 </form>
 
                 <div class="whatsapp-info">
-                    <p style="color: var(--text-light); margin-bottom: 10px;">ամ գրեք WhatsApp-ով</p>
+                    <p style="color: var(--text-light); margin-bottom: 10px;">Կdelays delays delays delays delays delays delays delays delays</p>
                     <a href="https://wa.me/37499915541" target="_blank">
                         <i class="fab fa-whatsapp"></i>
                         099 915 541
@@ -904,12 +1017,53 @@
         <!-- Footer -->
         <footer>
             <div class="footer-hearts">♥ ♥ ♥</div>
-            <p>Սպասում ենք Ձեզ մեր երջանիկ օրը կիսելու</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">Վարուան և Անահիտ</p>
+            <p>Սdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Վdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays</p>
         </footer>
     </div>
 
+    <!-- YouTube IFrame API -->
     <script>
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player;
+        var isPlaying = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtubePlayer', {
+                height: '1',
+                width: '1',
+                videoId: 'Ne-xVtVrQF0', // Calum Scott - You Are The Reason
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'loop': 1,
+                    'playlist': 'Ne-xVtVrQF0'
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            console.log('YouTube player is ready');
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                document.getElementById('musicControl').classList.add('playing');
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                isPlaying = false;
+                document.getElementById('musicControl').classList.remove('playing');
+            }
+        }
+
         // Create falling feathers
         function createFeathers() {
             const container = document.getElementById('feathersContainer');
@@ -931,37 +1085,36 @@
             const envelope = document.getElementById('envelope');
             const envelopeContainer = document.getElementById('envelopeContainer');
             const mainContent = document.getElementById('mainContent');
-            const music = document.getElementById('weddingMusic');
 
             envelope.classList.add('open');
+            
+            // Play music immediately when envelope is clicked
+            if (player && player.playVideo) {
+                player.setVolume(50);
+                player.playVideo();
+            }
             
             setTimeout(() => {
                 envelopeContainer.classList.add('hidden');
                 mainContent.classList.add('visible');
+                mainContent.style.display = 'block';
                 
-                // Play music
-                music.volume = 0.5;
-                music.play().catch(e => console.log('Audio play failed:', e));
-                document.getElementById('musicControl').classList.add('playing');
-            }, 1500);
+                setTimeout(() => {
+                    document.querySelectorAll('.gallery-item').forEach(item => {
+                        item.classList.add('visible');
+                    });
+                }, 500);
+            }, 2500);
         }
 
         // Toggle music
         function toggleMusic() {
-            const music = document.getElementById('weddingMusic');
-            const control = document.getElementById('musicControl');
-            const icon = document.getElementById('musicIcon');
+            if (!player) return;
 
-            if (music.paused) {
-                music.play();
-                control.classList.add('playing');
-                icon.classList.remove('fa-volume-mute');
-                icon.classList.add('fa-music');
+            if (isPlaying) {
+                player.pauseVideo();
             } else {
-                music.pause();
-                control.classList.remove('playing');
-                icon.classList.remove('fa-music');
-                icon.classList.add('fa-volume-mute');
+                player.playVideo();
             }
         }
 
@@ -994,26 +1147,36 @@
                     section.classList.add('visible');
                 }
             });
+
+            // Gallery items animation
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            galleryItems.forEach(item => {
+                const itemTop = item.getBoundingClientRect().top;
+                if (itemTop < windowHeight - 100) {
+                    item.classList.add('visible');
+                }
+            });
         }
 
         // Form submission
         function handleSubmit(e) {
             e.preventDefault();
             
-            const formData = new FormData(e.target);
-            const attendance = formData.get('attendance');
+            const name = document.getElementById('guestName').value;
+            const attendance = e.target.querySelector('input[name="attendance"]:checked').value;
             const guestCount = document.getElementById('guestCount').value;
+            const phone = document.getElementById('guestPhone').value;
             
-            let message = `*Հարսանիքի հաստատում*\n\n`;
-            message += `Անուն: ${e.target.querySelector('input[type="text"]').value}\n`;
-            message += `ասնակցություն: ${attendance === 'yes' ? 'Այո' : 'չ'}\n`;
-            message += `Հյուրերի քանակ: ${guestCount}\n`;
-            message += `Հեռախոս: ${e.target.querySelector('input[type="tel"]').value}`;
+            let message = `*Հdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays*\n\n`;
+            message += `Անdelays: ${name}\n`;
+            message += `Մdelays delays delays delays delays delays delays delays delays: ${attendance === 'yes' ? 'Այdelays' : 'Ոdelays'}\n`;
+            message += `Հdelays delays delays delays delays delays delays delays delays delays delays delays delays: ${guestCount}\n`;
+            message += `Հdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays: ${phone}`;
             
             const encodedMessage = encodeURIComponent(message);
             window.open(`https://wa.me/37499915541?text=${encodedMessage}`, '_blank');
             
-            alert('Շնորհակալություն! Ձեր պատասխանը ուղարկվել է WhatsApp-ով։');
+            alert('Շdelays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays delays......');
             e.target.reset();
         }
 
@@ -1022,7 +1185,6 @@
             createFeathers();
             updateCountdown();
             setInterval(updateCountdown, 1000);
-            handleScrollAnimations();
         };
 
         window.onscroll = function() {
