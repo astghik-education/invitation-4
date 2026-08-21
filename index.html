@@ -420,17 +420,19 @@
 <body>
 <canvas id="petals" aria-hidden="true"></canvas>
 
-<!-- ================= ԾՐԱՐ (ՔՈ ՈՒԶԱԾ ՁԵՎՈՎ) ================= -->
+<!-- ================= ԾՐԱՐ ================= -->
 <div id="intro">
   <div class="wrapper">
-    <div class="envelope-container" id="envelopeContainer" onclick="openEnvelope()">
+    <!-- ՈՒՇԱԴՐՈՒԹՅՈՒՆ: onclick-ը հեռացված է, որպեսզի JS-ը ճիշտ աշխատի -->
+    <div class="envelope-container" id="envelopeContainer">
       <div class="envelope">
         <div class="flap"></div>
         <div class="wax-seal">
           <span>ՎԱ</span>
         </div>
         <div class="card">
-          <img src="img-01.jpg" alt="Վարուժան և Անահիտ" class="couple-img">
+          <!-- Քո ուղարկած նկարի հղումը՝ որպեսզի անմիջապես տեսանելի լինի -->
+          <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Վարուժան և Անահիտ" class="couple-img">
           <div class="card-names">
             <span data-i18n="nameV">Վարուժան</span> 
             <span class="amp">&amp;</span> 
@@ -466,7 +468,7 @@
 <main>
   <section class="hero" id="home">
     <p class="overline anim d1" data-i18n="overline">Մենք ամուսնանում ենք</p>
-    <img class="hero-photo anim d2" src="img-01.jpg" alt="Վարուժան և Անահիտ">
+    <img class="hero-photo anim d2" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Վարուժան և Անահիտ">
     <h1 class="anim d3"><span data-i18n="nameV">Վարուժան</span> <span class="amp">&amp;</span> <span data-i18n="nameA">Անահիտ</span></h1>
     <div class="date-line anim d4" aria-label="25 օգոստոսի 2026">
       <span>25</span>
@@ -579,15 +581,15 @@
     </div>
     <div class="gal">
       <figure class="pol reveal g1">
-        <img loading="lazy" src="img-02.jpg" alt="Վարուժան և Անահիտ — պահ 1">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Վարուժան և Անահիտ — պահ 1">
         <figcaption>Վ ♥ Ա</figcaption>
       </figure>
       <figure class="pol reveal g2">
-        <img loading="lazy" src="img-03.jpg" alt="Վարուժան և Անահիտ — պահ 2">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Վարուժան և Անահիտ — պահ 2">
         <figcaption data-i18n="capG2">Մեր սերը</figcaption>
       </figure>
       <figure class="pol reveal g3">
-        <img loading="lazy" src="img-04.jpg" alt="Վարուժան և Անահիտ — պահ 3">
+        <img loading="lazy" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Վարուժան և Անահիտ — պահ 3">
         <figcaption data-i18n="capG3">Ընդմիշտ միասին</figcaption>
       </figure>
     </div>
@@ -825,7 +827,7 @@ btn.addEventListener('click', function(){
   else { player.playVideo(); setMusic(true); }
 });
 
-/* ================= ԾՐԱՐԻ ԲԱՑՈՒՄ (ՔՈ ՈՒԶԱԾ ՏՐԱՄԱԲԱՆՈՒԹՅՈՒՆՆԵՐՈՎ) ================= */
+/* ================= ԾՐԱՐԻ ԲԱՑՈՒՄ (ՈՒՂՂՎԱԾ ՏԱՐԲԵՐԱԿ) ================= */
 var intro = document.getElementById('intro');
 var container = document.getElementById('envelopeContainer');
 var opened = false;
@@ -834,24 +836,28 @@ function openEnvelope() {
   if (opened) return;
   opened = true;
   
-  // 1. Ավելացնել open դասը՝ ակտիվացնելով քո CSS անիմացիաները
+  // 1. Ակտիվացնել քո CSS անիմացիաները
   container.classList.add('open');
   
   // 2. Միացնել երաժշտությունը
   startMusic();
   
-  // 3. Քարտը վերև սահելուց հետո (1.8վ) սկսել ամբողջական էկրանի անցումը
+  // 3. Քարտը վերև սահելուց հետո սկսել ամբողջական էկրանի անցումը
   setTimeout(function() {
     intro.classList.add('fade');
   }, 1800);
   
-  // 4. Ամբողջությամբ հեռացնել ծրարը և ակտիվացնել հիմնական էջի անիմացիաները (3.0վ)
+  // 4. Ամբողջությամբ հեռացնել ծրարը և ակտիվացնել հիմնական էջի անիմացիաները
   setTimeout(function() {
     intro.style.display = 'none';
     document.body.classList.add('ready');
   }, 3000);
 }
 
+// Սա էր բացակայում՝ ճիշտ կապել կոճակը ֆունկցիայի հետ
+container.addEventListener('click', openEnvelope);
+
+/* ================= ՀԵՏՀԱՇՎԱՐԿ ================= */
 var TARGET = new Date('2026-08-25T11:00:00+04:00').getTime();
 var elD=document.getElementById('cdD'), elH=document.getElementById('cdH'),
     elM=document.getElementById('cdM'), elS=document.getElementById('cdS');
@@ -875,6 +881,7 @@ function tickCd(){
 }
 tickCd(); setInterval(tickCd, 1000);
 
+/* ================= SCROLL REVEAL ================= */
 var io = new IntersectionObserver(function(entries){
   entries.forEach(function(en){
     if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }
@@ -882,6 +889,7 @@ var io = new IntersectionObserver(function(entries){
 },{threshold:.15});
 document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
 
+/* ================= ՍՊԻՏԱԿ ՓՏՈՒՐՆԵՐ ================= */
 var cv = document.getElementById('petals'), ctx = cv.getContext('2d'), F = [];
 function sizeCv(){ cv.width = innerWidth; cv.height = innerHeight; }
 sizeCv(); addEventListener('resize', sizeCv);
@@ -933,6 +941,7 @@ if(!reduced){
   })();
 }
 
+/* ================= RSVP → WhatsApp ================= */
 var WA = '37499915541';
 var toast = document.getElementById('toast'), toastT;
 function showToast(msg){
